@@ -11,169 +11,138 @@
     header nav ul li a { color:white; text-decoration:none;}
     .container { max-width: 900px; margin:auto; padding:2rem;}
     h1,h2 { margin-bottom:1rem; }
-    .tiers { display:flex; flex-wrap:wrap; gap:1rem; margin-top:2rem;}
-    .tier { background:#111; padding:1rem; border-radius:8px; flex:1 1 200px; cursor:pointer;}
-    .tier:hover { background:#222; }
-    button { margin-top:0.5rem; padding:0.5rem 1rem; border:none; border-radius:5px; cursor:pointer; background:#0a84ff; color:#fff;}
-    /* Modal styles */
-    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; }
-    .modal-content { background:#111; padding:2rem; border-radius:8px; max-width:600px; width:90%; }
-    .close { float:right; font-size:1.5rem; cursor:pointer; }
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); justify-content:center; align-items:center; }
+    .modal-content { background:#111; padding:2rem; border-radius:8px; max-width:600px; width:90%; position:relative; }
+    .close { position:absolute; top:1rem; right:1rem; font-size:1.5rem; cursor:pointer; color:#fff;}
     input, select { width:100%; padding:0.5rem; margin:0.3rem 0; border-radius:5px; border:none; }
+    button { margin-top:0.5rem; padding:0.5rem 1rem; border:none; border-radius:5px; cursor:pointer; background:#0a84ff; color:#fff;}
   </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="quarterclub.html">Quarter Club</a></li>
-        <li><a href="terms.html">Terms</a></li>
-      </ul>
-    </nav>
-  </header>
+<header>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="quarterclub.html">Quarter Club</a></li>
+      <li><a href="terms.html">Terms</a></li>
+    </ul>
+  </nav>
+</header>
 
-  <main class="container">
-    <h1>Quarter Club Subscriptions</h1>
-    <p>Braxen Development offers a variety of subscription tiers. Select the tier you want to purchase and provide your business information to proceed.</p>
-    <div class="tiers">
-      <div class="tier" data-tier="$0.25 – Founders’ Circle" data-type="annual">Founders’ Circle – $0.25/yr</div>
-      <div class="tier" data-tier="$1 – Dollar Bill" data-type="annual">Dollar Bill – $1/yr</div>
-      <div class="tier" data-tier="$2 – Bread & Butter" data-type="annual">Bread & Butter – $2/yr</div>
-      <div class="tier" data-tier="$5 – Startup Lane" data-type="monthly">Startup Lane – $5/mo</div>
-      <div class="tier" data-tier="$10 – Builder’s Foundation" data-type="monthly">Builder’s Foundation – $10/mo</div>
-      <div class="tier" data-tier="$20 – Growth Track" data-type="monthly">Growth Track – $20/mo</div>
-      <div class="tier" data-tier="$50 – Pro Business" data-type="monthly">Pro Business – $50/mo</div>
-      <div class="tier" data-tier="$100 – Executive Class" data-type="monthly">Executive Class – $100/mo</div>
+<main class="container">
+  <h1>Quarter Club Subscriptions</h1>
+  <p>Select your desired subscription tier, choose a payment method, and provide your business information to proceed.</p>
+
+  <!-- Purchase Button to Open Modal -->
+  <button id="openModalBtn">Purchase Subscription</button>
+
+  <!-- Modal -->
+  <div class="modal" id="purchaseModal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h2>Purchase Subscription</h2>
+      <form id="purchaseForm">
+        <!-- Tier Selection Dropdown -->
+        <label for="tierSelect">Select Subscription Tier</label>
+        <select id="tierSelect" required>
+          <option value="">Choose a tier</option>
+          <option value="$0.25 – Founders’ Circle" data-type="annual">Founders’ Circle – $0.25/yr</option>
+          <option value="$1 – Dollar Bill" data-type="annual">Dollar Bill – $1/yr</option>
+          <option value="$2 – Bread & Butter" data-type="annual">Bread & Butter – $2/yr</option>
+          <option value="$5 – Startup Lane" data-type="monthly">Startup Lane – $5/mo</option>
+          <option value="$10 – Builder’s Foundation" data-type="monthly">Builder’s Foundation – $10/mo</option>
+          <option value="$20 – Growth Track" data-type="monthly">Growth Track – $20/mo</option>
+          <option value="$50 – Pro Business" data-type="monthly">Pro Business – $50/mo</option>
+          <option value="$100 – Executive Class" data-type="monthly">Executive Class – $100/mo</option>
+        </select>
+
+        <!-- Payment Method Dropdown -->
+        <label for="paymentMethod">Select Payment Method</label>
+        <select id="paymentMethod" required>
+          <option value="">Choose payment method</option>
+          <option value="paypal">PayPal</option>
+          <option value="crypto">Crypto</option>
+          <option value="cash">Cash</option>
+        </select>
+
+        <!-- Conditional Cash Transaction Code -->
+        <div id="cashCodeDiv" style="display:none;">
+          <label>Cash Transaction Code</label>
+          <input type="text" id="cashCode" placeholder="#00043000#">
+        </div>
+
+        <!-- Conditional Crypto Address/QR Placeholder -->
+        <div id="cryptoDiv" style="display:none;">
+          <p>Crypto payment QR code / address will appear here after backend integration.</p>
+        </div>
+
+        <!-- Business Information -->
+        <label>Business EIN</label>
+        <input type="text" id="ein" placeholder="XX-XXXXXXX" required>
+        <label>Business Name</label>
+        <input type="text" id="bname" required>
+        <label>Business Email</label>
+        <input type="email" id="bemail" required>
+        <label>Business Phone</label>
+        <input type="text" id="bphone" required>
+        <label>Street Address</label>
+        <input type="text" id="street" required>
+        <label>City</label>
+        <input type="text" id="city" required>
+        <label>State</label>
+        <select id="state" required>
+          <option value="">Select a state</option>
+          <!-- Add all 50 states here -->
+          <option value="AL">Alabama</option>
+          <option value="AK">Alaska</option>
+          <option value="AZ">Arizona</option>
+          <!-- … continue … -->
+        </select>
+        <label>ZIP Code</label>
+        <input type="text" id="zip" required>
+
+        <!-- Daily Emails -->
+        <label><input type="checkbox" id="dailyEmails"> Yes, I want daily financial updates</label>
+
+        <button type="submit">Proceed</button>
+      </form>
     </div>
+  </div>
 
-    <!-- Purchase Modal -->
-    <div class="modal" id="purchaseModal">
-      <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <h2 id="modalTierTitle">Purchase Tier</h2>
-        <form id="purchaseForm">
-          <label>Business EIN</label>
-          <input type="text" id="ein" placeholder="XX-XXXXXXX" required>
-          <label>Business Name</label>
-          <input type="text" id="bname" required>
-          <label>Business Email</label>
-          <input type="email" id="bemail" required>
-          <label>Business Phone</label>
-          <input type="text" id="bphone" required>
-          <label>Street Address</label>
-          <input type="text" id="street" required>
-          <label>City</label>
-          <input type="text" id="city" required>
-          <label>State</label>
-          <select id="state" required>
-            <option value="">Select a state</option>
-            <option value="AL">Alabama</option>
-            <option value="AK">Alaska</option>
-            <option value="AZ">Arizona</option>
-            <option value="AR">Arkansas</option>
-            <option value="CA">California</option>
-            <option value="CO">Colorado</option>
-            <option value="CT">Connecticut</option>
-            <option value="DE">Delaware</option>
-            <option value="FL">Florida</option>
-            <option value="GA">Georgia</option>
-            <option value="HI">Hawaii</option>
-            <option value="ID">Idaho</option>
-            <option value="IL">Illinois</option>
-            <option value="IN">Indiana</option>
-            <option value="IA">Iowa</option>
-            <option value="KS">Kansas</option>
-            <option value="KY">Kentucky</option>
-            <option value="LA">Louisiana</option>
-            <option value="ME">Maine</option>
-            <option value="MD">Maryland</option>
-            <option value="MA">Massachusetts</option>
-            <option value="MI">Michigan</option>
-            <option value="MN">Minnesota</option>
-            <option value="MS">Mississippi</option>
-            <option value="MO">Missouri</option>
-            <option value="MT">Montana</option>
-            <option value="NE">Nebraska</option>
-            <option value="NV">Nevada</option>
-            <option value="NH">New Hampshire</option>
-            <option value="NJ">New Jersey</option>
-            <option value="NM">New Mexico</option>
-            <option value="NY">New York</option>
-            <option value="NC">North Carolina</option>
-            <option value="ND">North Dakota</option>
-            <option value="OH">Ohio</option>
-            <option value="OK">Oklahoma</option>
-            <option value="OR">Oregon</option>
-            <option value="PA">Pennsylvania</option>
-            <option value="RI">Rhode Island</option>
-            <option value="SC">South Carolina</option>
-            <option value="SD">South Dakota</option>
-            <option value="TN">Tennessee</option>
-            <option value="TX">Texas</option>
-            <option value="UT">Utah</option>
-            <option value="VT">Vermont</option>
-            <option value="VA">Virginia</option>
-            <option value="WA">Washington</option>
-            <option value="WV">West Virginia</option>
-            <option value="WI">Wisconsin</option>
-            <option value="WY">Wyoming</option>
-          </select>
-          <label>ZIP Code</label>
-          <input type="text" id="zip" required>
-          <label>
-            <input type="checkbox" id="dailyEmails"> Yes, I want daily financial updates
-          </label>
-          <button type="submit">Proceed to Payment</button>
-        </form>
-      </div>
-    </div>
+</main>
 
-  </main>
+<footer class="container">
+  <p>Contact: <a href="mailto:support@braxendevelopment.work">support@braxendevelopment.work</a></p>
+  <p style="font-size:0.6rem; color:#888;">No refunds. All sales are final.</p>
+</footer>
 
-  <footer class="container">
-    <p>Contact: <a href="mailto:support@braxendevelopment.work">support@braxendevelopment.work</a></p>
-  </footer>
+<script>
+  // Modal Handling
+  const modal = document.getElementById('purchaseModal');
+  const openModalBtn = document.getElementById('openModalBtn');
+  const closeModal = document.getElementById('closeModal');
 
-  <script>
-    const modal = document.getElementById('purchaseModal');
-    const modalTitle = document.getElementById('modalTierTitle');
-    const closeModal = document.getElementById('closeModal');
-    const tiers = document.querySelectorAll('.tier');
-    const form = document.getElementById('purchaseForm');
+  openModalBtn.addEventListener('click', () => modal.style.display = 'flex');
+  closeModal.addEventListener('click', () => modal.style.display = 'none');
 
-    let selectedTier = '';
+  // Payment Method Conditional Logic
+  const paymentSelect = document.getElementById('paymentMethod');
+  paymentSelect.addEventListener('change', () => {
+    document.getElementById('cashCodeDiv').style.display = paymentSelect.value === 'cash' ? 'block' : 'none';
+    document.getElementById('cryptoDiv').style.display = paymentSelect.value === 'crypto' ? 'block' : 'none';
+  });
 
-    tiers.forEach(tier => {
-      tier.addEventListener('click', () => {
-        selectedTier = tier.dataset.tier;
-        modalTitle.innerText = 'Purchase: ' + selectedTier;
-        modal.style.display = 'flex';
-      });
-    });
-
-    closeModal.addEventListener('click', () => modal.style.display = 'none');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      // Collect form data
-      const data = {
-        tier: selectedTier,
-        ein: document.getElementById('ein').value,
-        name: document.getElementById('bname').value,
-        email: document.getElementById('bemail').value,
-        phone: document.getElementById('bphone').value,
-        street: document.getElementById('street').value,
-        city: document.getElementById('city').value,
-        state: document.getElementById('state').value,
-        zip: document.getElementById('zip').value,
-        dailyEmails: document.getElementById('dailyEmails').checked
-      };
-      console.log('Collected data:', data);
-      alert('Form submitted! Payment integration placeholder.');
-      modal.style.display = 'none';
-      form.reset();
-    });
-  </script>
+  // Form Submission Placeholder
+  const form = document.getElementById('purchaseForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const tier = document.getElementById('tierSelect').value;
+    const payment = document.getElementById('paymentMethod').value;
+    console.log('Tier:', tier, 'Payment:', payment);
+    alert('Form submitted! Backend integration coming soon.');
+    modal.style.display = 'none';
+    form.reset();
+  });
+</script>
 </body>
 </html>
