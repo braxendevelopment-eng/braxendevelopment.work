@@ -26,10 +26,65 @@
       or building ventures that stand the test of time. With a forward-looking approach and a commitment to results, Braxen continues to expand its reach 
       and shape ventures that matter.</p>
     </section>
+    <!-- EIN FORM + validation -->
+    <section>
+      <h2>Business EIN Submission</h2>
+      <form id="einForm">
+        <input type="text" id="ein" maxlength="10" placeholder="XX-XXXXXXX" autocomplete="off" required>
+        <span id="einError" style="color:red; display:none;">Please enter a valid EIN (XX-XXXXXXX)</span>
+        <span id="serverError" style="color:red; display:none;"></span>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
   </main>
-
   <footer>
     <p>Contact: <a href="mailto:support@braxendevelopment.work">support@braxendevelopment.work</a></p>
   </footer>
+
+  <script>
+    const einInput = document.getElementById('ein');
+    const einError = document.getElementById('einError');
+    const serverError = document.getElementById('serverError');
+    const form = document.getElementById('einForm');
+    const WORKER_ENDPOINT = "https://blackthorndevelopment.workers.dev/";
+
+    einInput.addEventListener('input', function() {
+      let val = this.value.replace(/D/g, '').slice(0,9);
+      if (val.length > 2) {
+        this.value = val.slice(0,2) + '-' + val.slice(2);
+      } else {
+        this.value = val;
+      }
+    });
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      einError.style.display = "none";
+      serverError.style.display = "none";
+      if (!/^d{2}-d{7}$/.test(einInput.value)) {
+        einError.style.display = "inline";
+        einInput.focus();
+        return false;
+      }
+      try {
+        const response = await fetch(WORKER_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ein: einInput.value })
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          serverError.innerText = result.error || "Submission failed.";
+          serverError.style.display = "inline";
+        } else {
+          alert("Submitted! Transaction ID: " + result.txnId);
+          form.reset();
+        }
+      } catch (err) {
+        serverError.innerText = "Network error. Try again later.";
+        serverError.style.display = "inline";
+      }
+    });
+  </script>
 </body>
 </html>
