@@ -1,40 +1,159 @@
+/* General Body Styles */
 body {
+  background-color: #000;
+  color: #fff;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   line-height: 1.6;
-  background-color: #f8f9fa;
-  color: #333;
 }
+
+/* Header & Navigation */
 header {
-  background: #003366;
-  color: #fff;
-  padding: 10px 0;
+  background-color: #111;
+  padding: 1rem 0;
 }
-nav ul {
-  list-style: none;
+header nav ul {
   display: flex;
+  list-style: none;
   justify-content: center;
+  gap: 2rem;
   margin: 0;
   padding: 0;
 }
-nav ul li {
-  margin: 0 15px;
-}
-nav ul li a {
+header nav ul li a {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s;
 }
-main {
-  padding: 20px;
-  max-width: 800px;
+header nav ul li a:hover {
+  color: #0a84ff;
+}
+
+/* Main Container */
+.container {
+  max-width: 900px;
   margin: auto;
+  padding: 2rem;
 }
-footer {
-  background: #003366;
+
+/* Headings */
+h1, h2 {
+  margin-bottom: 1rem;
   color: #fff;
+}
+
+/* Paragraphs */
+p {
+  margin-bottom: 1rem;
+}
+
+/* Links */
+a {
+  color: #0a84ff;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Buttons */
+button {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #0a84ff;
+  color: #fff;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+button:hover {
+  background-color: #0666cc;
+}
+
+/* Input and Select Fields */
+input, select {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.3rem 0;
+  border-radius: 5px;
+  border: none;
+}
+
+/* Tier Cards */
+.tiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.tier {
+  background-color: #111;
+  padding: 1rem;
+  border-radius: 8px;
+  flex: 1 1 200px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.tier:hover {
+  background-color: #222;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  background-color: #111;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+}
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Footer */
+footer {
   text-align: center;
-  padding: 10px;
-  margin-top: 20px;
+  padding: 1.5rem 0;
+  background-color: #111;
+  margin-top: 2rem;
+}
+footer p {
+  margin: 0.2rem 0;
+}
+footer p.fine-print {
+  font-size: 0.6rem;
+  color: #888;
+}
+
+/* Responsive */
+@media(max-width:600px){
+  header nav ul {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .tiers {
+    flex-direction: column;
+  }
 }
