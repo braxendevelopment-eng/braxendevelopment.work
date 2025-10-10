@@ -5,6 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Braxen Development</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    header, footer {
+      background-color: #111;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+    input, button {
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+    }
+    button {
+      cursor: pointer;
+      background-color: #1a73e8;
+      color: #fff;
+      border: none;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -18,15 +59,28 @@
   </header>
 
   <main>
-    <section>
-      <h1>Welcome to Braxen Development</h1>
-      <p>Braxen Development, Inc. was founded by The Grace of God with a mission to launch and grow ventures that make a lasting impact.
-      Built on vision and adaptability, the company thrives in diverse industries, with a strong focus on helping businesses establish and build credit.</p>
-      <p>At its core, Braxen Development is about opening doors—whether that means creating new opportunities, strengthening financial foundations, 
-      or building ventures that stand the test of time. With a forward-looking approach and a commitment to results, Braxen continues to expand its reach 
-      and shape ventures that matter.</p>
+    <!-- About Me Section -->
+    <section id="about-me" style="padding: 3rem 0; line-height: 1.6;">
+      <h1 style="text-align: center;">Welcome to Braxen Development</h1>
+      <p>
+        Braxen Development, Inc. was founded by The Grace of God to help businesses strengthen their financial standing and build credibility. We empower entrepreneurs to take control of their financial future and grow responsibly.
+      </p>
+      <p>
+        Our <a href="quarterclub.html" style="color:#1a73e8; text-decoration: underline;">Quarter Club</a> is an exclusive membership program specifically designed to rebuild business credit reputation. 
+        Named for its lowest subscription tier of $0.25 per month, it offers an affordable way for businesses to participate in credit rebuilding.
+      </p>
+      <p>
+        For $10, businesses can access the <strong>Path to Profit Handbook</strong>, which provides practical guidance on managing finances, understanding credit, and making informed decisions to grow responsibly.
+      </p>
+      <p>
+        For $25, clients receive a package that includes the Path to Profit Handbook, a Quarter Club subscription, and a consultation that provides a tailored solution for business development needs and strategies, conducted under a nondisclosure agreement (NDA) to ensure confidentiality.
+      </p>
+      <p>
+        Join the Quarter Club today to begin rebuilding your business credit, and consider the $25 package for educational resources and a strategic business solution under NDA.
+      </p>
     </section>
-    <!-- EIN FORM + validation -->
+
+    <!-- EIN Submission Form -->
     <section>
       <h2>Business EIN Submission</h2>
       <form id="einForm">
@@ -37,6 +91,7 @@
       </form>
     </section>
   </main>
+
   <footer>
     <p>Contact: <a href="mailto:support@braxendevelopment.work">support@braxendevelopment.work</a></p>
   </footer>
@@ -49,7 +104,7 @@
     const WORKER_ENDPOINT = "https://blackthorndevelopment.workers.dev/";
 
     einInput.addEventListener('input', function() {
-      let val = this.value.replace(/D/g, '').slice(0,9);
+      let val = this.value.replace(/\D/g, '').slice(0,9);
       if (val.length > 2) {
         this.value = val.slice(0,2) + '-' + val.slice(2);
       } else {
@@ -61,7 +116,7 @@
       e.preventDefault();
       einError.style.display = "none";
       serverError.style.display = "none";
-      if (!/^d{2}-d{7}$/.test(einInput.value)) {
+      if (!/^\d{2}-\d{7}$/.test(einInput.value)) {
         einError.style.display = "inline";
         einInput.focus();
         return false;
