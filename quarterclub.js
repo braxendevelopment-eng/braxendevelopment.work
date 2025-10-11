@@ -1,11 +1,11 @@
-// ----------------- DOM Elements -----------------
+// DOM Elements
 const tierSelect = document.getElementById('tier-select');
 const billingCycle = document.getElementById('billing-cycle');
 const paymentType = document.getElementById('payment-type');
 const priceDisplay = document.getElementById('price-display');
 const form = document.getElementById('quarterclub-form');
 
-// ----------------- Price Display -----------------
+// Price Display
 function updatePrice() {
     const selectedValue = tierSelect.value;
     const selectedText = tierSelect.options[tierSelect.selectedIndex].text;
@@ -36,7 +36,7 @@ function updatePrice() {
     priceDisplay.textContent = displayText;
 }
 
-// ----------------- Final Amount -----------------
+// Final Amount
 function getFinalAmount() {
     const basePrice = parseFloat(tierSelect.value);
     if (!basePrice) return null;
@@ -50,7 +50,7 @@ function getFinalAmount() {
     return amount.toFixed(2);
 }
 
-// ----------------- Conditional Payment Loader -----------------
+// Conditional Payment Loader
 function loadPaymentScript(method) {
     const existingScript = document.getElementById('payment-script');
     if (existingScript) existingScript.remove();
@@ -72,13 +72,12 @@ function loadPaymentScript(method) {
     document.body.appendChild(script);
 }
 
-// ----------------- Form Submission -----------------
+// Form Submission
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const finalAmount = getFinalAmount();
     if (finalAmount === null) return;
 
-    // Collect form data
     const businessData = {};
     form.querySelectorAll('input, select').forEach(el => {
         businessData[el.id] = el.value;
@@ -98,16 +97,12 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-// ----------------- Event Listeners -----------------
+// Event Listeners
 tierSelect.addEventListener('change', updatePrice);
 billingCycle.addEventListener('change', updatePrice);
+paymentType.addEventListener('change', () => loadPaymentScript(paymentType.value));
 
-paymentType.addEventListener('change', () => {
-    // Load payment script dynamically
-    loadPaymentScript(paymentType.value);
-});
-
-// ----------------- Initialize -----------------
+// Initialize
 window.addEventListener('DOMContentLoaded', () => {
     updatePrice();
     if (paymentType.value) loadPaymentScript(paymentType.value);
