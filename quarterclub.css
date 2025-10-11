@@ -1,4 +1,4 @@
-/* General Body & Typography */
+/* General Styles */
 body {
     background-color: #000;
     color: #fff;
@@ -7,13 +7,8 @@ body {
     padding: 0;
 }
 
-h1, h2, h3, p, label {
-    color: #fff;
-}
-
-/* Navigation */
 nav {
-    background-color: #111;
+    background-color: #000;
     padding: 10px 20px;
 }
 
@@ -29,19 +24,13 @@ nav a {
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    transition: color 0.3s;
 }
 
-nav a:hover {
-    color: #00ffcc;
-}
-
-/* Sections */
 section {
     margin: 20px;
 }
 
-/* Form Elements */
+/* Labels (always white) */
 form label {
     display: block;
     margin: 10px 0 5px;
@@ -49,7 +38,9 @@ form label {
     color: #fff;
 }
 
-form input, form select, form button {
+/* Inputs and selects (typed text black, background light for contrast) */
+form input,
+form select {
     display: block;
     width: 100%;
     padding: 10px;
@@ -58,16 +49,19 @@ form input, form select, form button {
     border-radius: 5px;
     border: 1px solid #555;
     box-sizing: border-box;
+    color: #000; /* typed text is black */
+    background-color: #fff; /* light background for readability */
 }
 
-form input:focus, form select:focus {
+/* Focus state for inputs/selects */
+form input:focus,
+form select:focus {
     outline: none;
     border-color: #00ffcc;
     box-shadow: 0 0 5px #00ffcc;
-    background-color: #111;
-    color: #fff;
 }
 
+/* Buttons */
 form button {
     background-color: #111;
     color: #00ffcc;
@@ -82,42 +76,12 @@ form button:hover {
 }
 
 /* Payment Sections */
-#paypal-button-container, #polygon-section, #cash-section {
+#paypal-button-container,
+#polygon-section,
+#cash-section {
     margin-top: 20px;
 }
 
 #polygon-wallet {
     width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background-color: #111;
-    color: #fff;
-}
-
-#polygon-section p, #polygon-gas-fee {
-    margin: 10px 0;
-    font-weight: bold;
-}
-
-/* Price Display */
-#price-display {
-    font-weight: bold;
-    margin-top: 10px;
-    color: #00ffcc;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    margin: 20px;
-    color: #888;
-}
-
-/* Responsive Layout */
-@media (max-width: 768px) {
-    nav ul {
-        flex-direction: column;
-        gap: 10px;
-    }
 }
