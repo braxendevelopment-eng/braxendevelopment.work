@@ -5,144 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quarter Club - Braxen Development</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body { background-color: #000; color: #fff; font-family: Arial, sans-serif; margin:0; padding:0;}
-    header nav ul { display:flex; list-style:none; padding:1rem; gap:2rem;}
-    header nav ul li a { color:white; text-decoration:none;}
-    .container { max-width: 900px; margin:auto; padding:2rem;}
-    h1,h2 { margin-bottom:1rem; }
-    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); justify-content:center; align-items:center; }
-    .modal-content { background:#111; padding:2rem; border-radius:8px; max-width:600px; width:90%; position:relative; }
-    .close { position:absolute; top:1rem; right:1rem; font-size:1.5rem; cursor:pointer; color:#fff;}
-    input, select { width:100%; padding:0.5rem; margin:0.3rem 0; border-radius:5px; border:none; }
-    button { margin-top:0.5rem; padding:0.5rem 1rem; border:none; border-radius:5px; cursor:pointer; background:#0a84ff; color:#fff;}
-  </style>
 </head>
 <body>
-<header>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="quarterclub.html">Quarter Club</a></li>
-      <li><a href="terms.html">Terms</a></li>
-    </ul>
-  </nav>
-</header>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="quarterclub.html">Quarter Club</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<main class="container">
-  <h1>Quarter Club Subscriptions</h1>
-  <p>Select your desired subscription tier, choose a payment method, and provide your business information to proceed.</p>
+  <main>
+    <section>
+      <h1>Quarter Club</h1>
+      <p>Braxen Development’s Quarter Club is designed to help businesses rebuild credit reputation. The lowest subscription starts at just $0.25 per month, giving you access to the essentials of establishing financial credibility.</p>
+      <p>For $10, you can also gain the <strong>Path to Profit Handbook</strong>, a practical guide that provides insight into managing business finances. Additional solutions are available, including consultation packages for business development needs, which come with a signed NDA.</p>
+    </section>
 
-  <!-- Purchase Button to Open Modal -->
-  <button id="openModalBtn">Purchase Subscription</button>
+    <section id="tiers">
+      <h2>Subscription Tiers</h2>
+      <ul>
+        <li>$0.25/mo – Founders’ Circle (Annual)</li>
+        <li>$1/mo – Dollar Bill (Annual)</li>
+        <li>$2/mo – Bread & Butter (Annual)</li>
+        <li>$5/mo – Startup Lane (Monthly)</li>
+        <li>$10/mo – Builder’s Foundation (Monthly)</li>
+        <li>$20/mo – Growth Track (Monthly)</li>
+        <li>$50/mo – Pro Business (Monthly)</li>
+        <li>$100/mo – Executive Class (Monthly)</li>
+      </ul>
+      <p>Note: Only tiers $5/mo and higher allow monthly subscriptions; the first three are annual only. Multiple annual tiers can be purchased simultaneously.</p>
+    </section>
 
-  <!-- Modal -->
-  <div class="modal" id="purchaseModal">
-    <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <h2>Purchase Subscription</h2>
+    <section id="purchase">
+      <h2>Purchase & Add-Ons</h2>
+      <p>Select your subscription tier, frequency, payment type, and any optional add-ons below:</p>
+
       <form id="purchaseForm">
-        <!-- Tier Selection Dropdown -->
-        <label for="tierSelect">Select Subscription Tier</label>
-        <select id="tierSelect" required>
-          <option value="">Choose a tier</option>
-          <option value="$0.25 – Founders’ Circle" data-type="annual">Founders’ Circle – $0.25/yr</option>
-          <option value="$1 – Dollar Bill" data-type="annual">Dollar Bill – $1/yr</option>
-          <option value="$2 – Bread & Butter" data-type="annual">Bread & Butter – $2/yr</option>
-          <option value="$5 – Startup Lane" data-type="monthly">Startup Lane – $5/mo</option>
-          <option value="$10 – Builder’s Foundation" data-type="monthly">Builder’s Foundation – $10/mo</option>
-          <option value="$20 – Growth Track" data-type="monthly">Growth Track – $20/mo</option>
-          <option value="$50 – Pro Business" data-type="monthly">Pro Business – $50/mo</option>
-          <option value="$100 – Executive Class" data-type="monthly">Executive Class – $100/mo</option>
+        <!-- Business Info -->
+        <input type="text" id="bizName" placeholder="Business Name" required>
+        <input type="text" id="ein" placeholder="EIN (XX-XXXXXXX)" maxlength="10" required>
+        <input type="email" id="email" placeholder="Business Email" required>
+        <input type="tel" id="phone" placeholder="Business Phone">
+
+        <!-- Address -->
+        <input type="text" id="street" placeholder="Street Address" required>
+        <input type="text" id="city" placeholder="City" required>
+        <select id="state" required>
+          <option value="">State</option>
+          <option value="AL">AL</option>
+          <option value="AK">AK</option>
+          <!-- Add all states -->
+        </select>
+        <input type="text" id="zip" placeholder="Zip Code" required>
+
+        <!-- Subscription Tier -->
+        <label>Subscription Tier</label>
+        <select id="tier" required>
+          <option value="">Select Tier</option>
+          <option value="Founders’ Circle">0.25/mo – Founders’ Circle (Annual)</option>
+          <option value="Dollar Bill">1/mo – Dollar Bill (Annual)</option>
+          <option value="Bread & Butter">2/mo – Bread & Butter (Annual)</option>
+          <option value="Startup Lane">5/mo – Startup Lane (Monthly)</option>
+          <option value="Builder’s Foundation">10/mo – Builder’s Foundation (Monthly)</option>
+          <option value="Growth Track">20/mo – Growth Track (Monthly)</option>
+          <option value="Pro Business">50/mo – Pro Business (Monthly)</option>
+          <option value="Executive Class">100/mo – Executive Class (Monthly)</option>
         </select>
 
-        <!-- Payment Method Dropdown -->
-        <label for="paymentMethod">Select Payment Method</label>
-        <select id="paymentMethod" required>
-          <option value="">Choose payment method</option>
+        <!-- Frequency -->
+        <label>Frequency</label>
+        <select id="frequency" required>
+          <option value="">Select Frequency</option>
+          <option value="monthly">Monthly</option>
+          <option value="annual">Annual</option>
+        </select>
+
+        <!-- Payment Type -->
+        <label>Payment Type</label>
+        <select id="paymentType" required>
+          <option value="">Select Payment Type</option>
           <option value="paypal">PayPal</option>
-          <option value="crypto">Crypto</option>
+          <option value="crypto">Polygon USDC</option>
           <option value="cash">Cash</option>
         </select>
 
-        <!-- Conditional Cash Transaction Code -->
-        <div id="cashCodeDiv" style="display:none;">
-          <label>Cash Transaction Code</label>
-          <input type="text" id="cashCode" placeholder="#00043000#">
-        </div>
+        <!-- Cash code -->
+        <input type="text" id="cashCode" placeholder="Cash Code (#00043000#)">
 
-        <!-- Conditional Crypto Address/QR Placeholder -->
-        <div id="cryptoDiv" style="display:none;">
-          <p>Crypto payment QR code / address will appear here after backend integration.</p>
-        </div>
+        <!-- Crypto hash -->
+        <input type="text" id="cryptoHash" placeholder="Polygon Transaction Hash">
 
-        <!-- Business Information -->
-        <label>Business EIN</label>
-        <input type="text" id="ein" placeholder="XX-XXXXXXX" required>
-        <label>Business Name</label>
-        <input type="text" id="bname" required>
-        <label>Business Email</label>
-        <input type="email" id="bemail" required>
-        <label>Business Phone</label>
-        <input type="text" id="bphone" required>
-        <label>Street Address</label>
-        <input type="text" id="street" required>
-        <label>City</label>
-        <input type="text" id="city" required>
-        <label>State</label>
-        <select id="state" required>
-          <option value="">Select a state</option>
-          <!-- Add all 50 states here -->
-          <option value="AL">Alabama</option>
-          <option value="AK">Alaska</option>
-          <option value="AZ">Arizona</option>
-          <!-- … continue … -->
+        <!-- Add-Ons -->
+        <label>Add-Ons</label>
+        <select multiple id="addOns">
+          <option value="Path to Profit Handbook">Path to Profit Handbook ($10)</option>
+          <option value="Consultation + NDA">Consultation + NDA ($25)</option>
         </select>
-        <label>ZIP Code</label>
-        <input type="text" id="zip" required>
 
-        <!-- Daily Emails -->
-        <label><input type="checkbox" id="dailyEmails"> Yes, I want daily financial updates</label>
-
-        <button type="submit">Proceed</button>
+        <button type="submit">Purchase</button>
+        <span id="formError" style="color:red; display:none;"></span>
       </form>
-    </div>
-  </div>
+    </section>
+  </main>
 
-</main>
+  <footer>
+    <p>Contact: <a href="mailto:support@braxendevelopment.work">support@braxendevelopment.work</a></p>
+  </footer>
 
-<footer class="container">
-  <p>Contact: <a href="mailto:support@braxendevelopment.work">support@braxendevelopment.work</a></p>
-  <p style="font-size:0.6rem; color:#888;">No refunds. All sales are final.</p>
-</footer>
-
-<script>
-  // Modal Handling
-  const modal = document.getElementById('purchaseModal');
-  const openModalBtn = document.getElementById('openModalBtn');
-  const closeModal = document.getElementById('closeModal');
-
-  openModalBtn.addEventListener('click', () => modal.style.display = 'flex');
-  closeModal.addEventListener('click', () => modal.style.display = 'none');
-
-  // Payment Method Conditional Logic
-  const paymentSelect = document.getElementById('paymentMethod');
-  paymentSelect.addEventListener('change', () => {
-    document.getElementById('cashCodeDiv').style.display = paymentSelect.value === 'cash' ? 'block' : 'none';
-    document.getElementById('cryptoDiv').style.display = paymentSelect.value === 'crypto' ? 'block' : 'none';
-  });
-
-  // Form Submission Placeholder
-  const form = document.getElementById('purchaseForm');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const tier = document.getElementById('tierSelect').value;
-    const payment = document.getElementById('paymentMethod').value;
-    console.log('Tier:', tier, 'Payment:', payment);
-    alert('Form submitted! Backend integration coming soon.');
-    modal.style.display = 'none';
-    form.reset();
-  });
-</script>
+  <script src="purchase.js"></script>
 </body>
 </html>
