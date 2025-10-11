@@ -290,6 +290,44 @@ function renderPayPalButton(amount) {
     })
   }).render('#paypal-button-container');
 }
+  // Polygon gas + USD conversion logic
+async function updatePolygonGasFee() {
+    const gasFeeEl = document.getElementById('polygon-gas-fee');
+    try {
+        // Fetch Polygon gas info
+        const gasResponse = await fetch('https://gasstation.polygon.technology/v2');
+        if (!gasResponse.ok) throw new Error('Failed to fetch gas data');
+        const gasData = await gasResponse.json();
+        const fastGasGwei = gasData.fast.maxFee; // in wei
+
+        // Fetch MATIC price in USD from CoinGecko
+        const priceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd');
+        if (!priceResponse.ok) throw new Error('Failed to fetch MATIC price');
+        const priceData = await priceResponse.json();
+        const maticUsd = priceData['matic-network'].usd;
+
+        // Convert gas from wei to MATIC
+        const gasMatic = fastGasGwei / 1e18;
+
+        // USD cost
+        const gasUsd = gasMatic * maticUsd;
+
+        gasFeeEl.textContent = `Estimated Gas Fee: ${gasMatic.toFixed(6)} MATIC (~$${gasUsd.toFixed(2)} USD)`;
+    } catch (err) {
+        console.error(err);
+        gasFeeEl.textContent = "Estimated Gas Fee: Unavailable (check network)";
+    }
+}
+
+// Call whenever Polygon payment is selected
+paymentType.addEventListener('change', () => {
+    if (paymentType.value === 'polygon') {
+        polygonSection.style.display = 'block';
+        updatePolygonGasFee();
+    } else {
+        polygonSection.style.display = 'none';
+    }
+});
 
 // Form submission
 form.addEventListener('submit', async (e) => {
