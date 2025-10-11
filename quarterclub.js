@@ -1,11 +1,7 @@
-// =====================
-// Elements
-// =====================
 const tierSelect = document.getElementById('tier-select');
 const billingCycle = document.getElementById('billing-cycle');
 const paymentType = document.getElementById('payment-type');
 const priceDisplay = document.getElementById('price-display');
-
 const paypalContainer = document.getElementById('paypal-button-container');
 const polygonSection = document.getElementById('polygon-section');
 const cashSection = document.getElementById('cash-section');
@@ -14,11 +10,9 @@ const polygonHashInput = document.getElementById('polygon-hash');
 const copyPolygonBtn = document.getElementById('copy-polygon');
 const form = document.getElementById('quarterclub-form');
 
-const MASTER_CASH_CODE = "YOUR_SECRET_CODE"; // Replace with your Cloudflare secret
+const MASTER_CASH_CODE = "YOUR_SECRET_CODE"; // Replace with secret
 
-// =====================
-// Update Tier Price
-// =====================
+/* -------- Price Display -------- */
 function updatePrice() {
     const selectedValue = tierSelect.value;
     const selectedText = tierSelect.options[tierSelect.selectedIndex].text;
@@ -40,20 +34,18 @@ function updatePrice() {
     if (billing === 'monthly' && basePrice < 5) {
         displayText = `${selectedText} — *Monthly billing not available for this tier.*`;
     } else if (billing === 'annual') {
-        displayText = `${selectedText} — Annual Plan: $${(basePrice*12).toFixed(2)}/yr`;
+        const annualPrice = (basePrice * 12).toFixed(2);
+        displayText = `${selectedText} — Annual Plan: $${annualPrice}/yr`;
     } else {
         displayText = `${selectedText} — Monthly Plan: $${basePrice}/mo`;
     }
 
     priceDisplay.textContent = displayText;
 }
-
 tierSelect.addEventListener('change', updatePrice);
 billingCycle.addEventListener('change', updatePrice);
 
-// =====================
-// Copy Polygon Wallet
-// =====================
+/* -------- Copy Polygon Wallet -------- */
 copyPolygonBtn.addEventListener('click', () => {
     const wallet = document.getElementById('polygon-wallet');
     wallet.select();
@@ -61,15 +53,13 @@ copyPolygonBtn.addEventListener('click', () => {
     alert('Polygon address copied!');
 });
 
-// =====================
-// Polygon Gas Fee
-// =====================
+/* -------- Polygon Gas Fee -------- */
 async function updatePolygonGasFee() {
     const gasFeeEl = document.getElementById('polygon-gas-fee');
     try {
         const gasResponse = await fetch('https://gasstation.polygon.technology/v2');
         const gasData = await gasResponse.json();
-        const fastGasGwei = gasData.fast.maxFee; // in wei
+        const fastGasGwei = gasData.fast.maxFee;
 
         const priceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd');
         const priceData = await priceResponse.json();
@@ -85,33 +75,25 @@ async function updatePolygonGasFee() {
     }
 }
 
-// Auto-update every 15s when Polygon selected
+/* Auto-update every 15s when Polygon is selected */
 setInterval(() => {
     if(paymentType.value === 'polygon') updatePolygonGasFee();
 }, 15000);
 
-// =====================
-// Toggle Payment Sections
-// =====================
+/* -------- Payment Type Toggle -------- */
 paymentType.addEventListener('change', () => {
     paypalContainer.innerHTML = '';
     polygonSection.style.display = cashSection.style.display = 'none';
 
-    if(paymentType.value === 'paypal' && tierSelect.value) {
-        renderPayPalButton(getFinalAmount());
-    }
+    if(paymentType.value === 'paypal' && tierSelect.value) renderPayPalButton(getFinalAmount());
     if(paymentType.value === 'polygon') {
         polygonSection.style.display = 'block';
         updatePolygonGasFee();
     }
-    if(paymentType.value === 'cash') {
-        cashSection.style.display = 'block';
-    }
+    if(paymentType.value === 'cash') cashSection.style.display = 'block';
 });
 
-// =====================
-// Calculate Final Amount
-// =====================
+/* -------- Final Amount -------- */
 function getFinalAmount() {
     const basePrice = parseFloat(tierSelect.value);
     if(!basePrice) return null;
@@ -124,36 +106,21 @@ function getFinalAmount() {
     return amount;
 }
 
-// =====================
-// Render PayPal Button (Dark Theme)
-// =====================
+/* -------- PayPal Button -------- */
 function renderPayPalButton(amount) {
-    if (!amount) return;
-    paypalContainer.innerHTML = ""; 
-
+    if(!amount) return;
+    paypalContainer.innerHTML = "";
     paypal.Buttons({
-        style: {
-            color: 'black',
-            shape: 'rect',
-            label: 'pay',
-            height: 40
-        },
         createOrder: (data, actions) => actions.order.create({
             purchase_units: [{ amount: { value: amount } }]
         }),
         onApprove: (data, actions) => actions.order.capture().then(details => {
             alert('Transaction completed by ' + details.payer.name.given_name);
-        }),
-        onError: (err) => {
-            console.error(err);
-            alert('Error processing PayPal payment.');
-        }
+        })
     }).render('#paypal-button-container');
 }
 
-// =====================
-// Form Submission
-// =====================
+/* -------- Form Submission -------- */
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const finalAmount = getFinalAmount();
@@ -161,20 +128,10 @@ form.addEventListener('submit', async (e) => {
 
     const payment = paymentType.value;
 
-    // Validate Cash
-    if(payment === 'cash' && cashCodeInput.value.trim() !== MASTER_CASH_CODE) {
-        return alert('Invalid cash code.');
-    }
-
-    // Validate Polygon
-    if(payment === 'polygon' && !polygonHashInput.value.trim()) {
-        return alert('Enter Polygon transaction hash.');
-    }
-
-    // PayPal handled separately
+    if(payment === 'cash' && cashCodeInput.value.trim() !== MASTER_CASH_CODE) return alert('Invalid cash code.');
+    if(payment === 'polygon' && !polygonHashInput.value.trim()) return alert('Enter Polygon transaction hash.');
     if(payment === 'paypal') return renderPayPalButton(finalAmount);
 
-    // Collect data
     const businessData = {
         name: document.getElementById('business-name').value,
         ein: document.getElementById('business-ein').value,
