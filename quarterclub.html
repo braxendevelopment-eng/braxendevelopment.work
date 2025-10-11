@@ -175,9 +175,21 @@ function renderPayPalButton(amount) {
 // Payment type change
 paymentType.addEventListener('change', () => {
   paypalContainer.innerHTML = "";
+  const type = paymentType.value;
+
+  // Hide cash code by default
   cashCodeInput.style.display = "none";
   cashCodeLabel.style.display = "none";
 
-  const type = paymentType.value;
-  if (type === 'paypal' && tierSelect.value) renderPayPalButton(tierSelect.value);
-  else if (type === 'polygon') alert(`Send payment to your Polygon Wallet: ${POLYGON_WALLET_ADDRESS} and submit the transaction hash.`);
+  if (type === 'paypal' && tierSelect.value) {
+    renderPayPalButton(tierSelect.value);
+  } else if (type === 'polygon') {
+    alert(`Send payment to your Polygon Wallet: ${POLYGON_WALLET_ADDRESS} and submit the transaction hash.`);
+  } else if (type === 'cash') {
+    // Show the input for cash code
+    cashCodeInput.style.display = "block";
+    cashCodeLabel.style.display = "block";
+    cashCodeInput.focus(); // focuses cursor on the input immediately
+    alert("Please enter your unique cash transaction code to complete payment.");
+  }
+});
