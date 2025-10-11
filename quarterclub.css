@@ -103,3 +103,10 @@ form button:hover {
     line-height: 1.6;
     margin-bottom: 15px;
 }
+
+header nav h1 {
+  font-size: 28px; /* or same as home/quarterclub */
+  font-weight: bold;
+  color: #fff;
+  margin: 0;
+}
