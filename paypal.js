@@ -5,14 +5,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Map tiers to PayPal plan IDs (replace with your actual PayPal subscription plan IDs)
     const planIds = {
-        '0.25': 'P-PLANID1',  // Founders’ Circle
-        '2': 'P-PLANID2',     // Bread & Butter
-        '5': 'P-PLANID3',     // Startup Lane
-        '10': 'P-PLANID4',    // Builder’s Foundation
-        '20': 'P-PLANID5',    // Growth Track
-        '50': 'P-PLANID6',    // Pro Business
-        '100': 'P-PLANID7'    // Executive Class
-    };
+    '0.25': 'P-PLANID1',   // Founders’ Circle
+    '1': 'P-PLANID1B',     // Dollar Bill
+    '2': 'P-PLANID2',      // Bread & Butter
+    '5': 'P-PLANID3',      // Startup Lane
+    '10': 'P-PLANID4',     // Builder’s Foundation
+    '20': 'P-PLANID5',     // Growth Track
+    '50': 'P-PLANID6',     // Pro Business
+    '100': 'P-PLANID7'     // Executive Class
+};
 
     function getFinalAmount() {
         const basePrice = parseFloat(tierSelect.value);
