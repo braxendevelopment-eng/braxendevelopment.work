@@ -4,18 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quarter Club - Braxen Development</title>
-<style>
-  body { background-color: #000; color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 0; }
-  nav { background-color: #000; padding: 10px 20px; }
-  nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 30px; }
-  nav a { color: #fff; text-decoration: none; font-weight: bold; }
-  section { margin: 20px; }
-  label, select, input, button { display: block; margin: 10px 0; color: #000; }
-  select, input, button { padding: 8px; font-size: 14px; }
-  button { background-color: #000; color: #fff; border: none; cursor: pointer; }
-  #paypal-button-container, #polygon-section, #cash-section { margin-top: 20px; }
-  #polygon-wallet { width: 100%; }
-</style>
+<link rel="stylesheet" href="quarterclub.css">
+<script src="https://www.paypal.com/sdk/js?client-id=AdefJjr7m6mZkDwKqt_nyTiOSRCXIThl2h41bgHzev27XWXZFLyGhXF7i8RIfM1ZDucgNVzkdb-w5bnd&currency=USD"></script>
 </head>
 <body>
 <header>
@@ -27,21 +17,14 @@
     </ul>
   </nav>
 </header>
+
 <main>
 <section>
   <h1>Welcome to the Quarter Club</h1>
   <p>Select your tier and payment method. Annual payments multiply your selected tier by 12. Monthly payments only available for $5 and above.</p>
 </section>
 
-
-
-
-
-
-
-
-
-  <section>
+<section>
 <form id="quarterclub-form">
   <label for="business-name">Business Name:</label>
   <input type="text" id="business-name" required>
@@ -120,8 +103,7 @@
   <label for="business-zip">ZIP Code:</label>
   <input type="text" id="business-zip" required>
 
-  <!-- Tier Selection -->
-  <label for="tier-select" style="color: white;">Select Tier / Package:</label>
+  <label for="tier-select">Select Tier / Package:</label>
   <select id="tier-select" required>
     <option value="">Select a Tier / Package</option>
     <option value="0.25">Founders’ Circle ($0.25/mo, billed $3/yr)</option>
@@ -134,17 +116,14 @@
     <option value="10_pdf">Path to Profit Handbook ($10 one-time)</option>
   </select>
 
-  <!-- Billing Option -->
-  <label for="billing-cycle" style="color: white;">Billing Cycle:</label>
+  <label for="billing-cycle">Billing Cycle:</label>
   <select id="billing-cycle" required>
     <option value="monthly">Monthly</option>
     <option value="annual">Annual</option>
   </select>
 
-  <!-- Display Price -->
-  <p id="price-display" style="color: white; font-weight: bold;">Select a tier to view pricing.</p>
+  <p id="price-display" style="color:white; font-weight:bold;">Select a tier to view pricing.</p>
 
-  <!-- Payment Method -->
   <label for="payment-type">Payment Method:</label>
   <select id="payment-type" required>
     <option value="">Select Payment Method</option>
@@ -153,7 +132,6 @@
     <option value="cash">Cash</option>
   </select>
 
-  <!-- Payment Sections -->
   <div id="paypal-button-container"></div>
 
   <div id="polygon-section" style="display:none;">
@@ -172,203 +150,13 @@
 
   <button type="submit">Submit & Pay</button>
 </form>
-  </section>
+</section>
+</main>
 
-
-
-
-  <script src="https://www.paypal.com/sdk/js?client-id=AdefJjr7m6mZkDwKqt_nyTiOSRCXIThl2h41bgHzev27XWXZFLyGhXF7i8RIfM1ZDucgNVzkdb-w5bnd&currency=USD"></script>
-<script>
-const tierSelect = document.getElementById('tier-select');
-const billingCycle = document.getElementById('billing-cycle');
-const paymentType = document.getElementById('payment-type');
-const priceDisplay = document.getElementById('price-display');
-
-const paypalContainer = document.getElementById('paypal-button-container');
-const polygonSection = document.getElementById('polygon-section');
-const cashSection = document.getElementById('cash-section');
-const cashCodeInput = document.getElementById('cash-code');
-const polygonHashInput = document.getElementById('polygon-hash');
-const copyPolygonBtn = document.getElementById('copy-polygon');
-const form = document.getElementById('quarterclub-form');
-
-const MASTER_CASH_CODE = "YOUR_SECRET_CODE"; // Replace with your code
-
-// ----------------- Price Display -----------------
-function updatePrice() {
-    const selectedValue = tierSelect.value;
-    const selectedText = tierSelect.options[tierSelect.selectedIndex].text;
-    const billing = billingCycle.value;
-
-    if (!selectedValue) {
-        priceDisplay.textContent = 'Select a tier to view pricing.';
-        return;
-    }
-
-    if (selectedValue.includes('_pdf')) {
-        priceDisplay.textContent = 'Path to Profit Handbook — $10 one-time payment.';
-        return;
-    }
-
-    const basePrice = parseFloat(selectedValue);
-    let displayText = '';
-
-    if (billing === 'monthly' && basePrice < 5) {
-        displayText = `${selectedText} — *Monthly billing not available for this tier.*`;
-    } else if (billing === 'annual') {
-        const annualPrice = (basePrice * 12).toFixed(2);
-        displayText = `${selectedText} — Annual Plan: $${annualPrice}/yr`;
-    } else {
-        displayText = `${selectedText} — Monthly Plan: $${basePrice}/mo`;
-    }
-
-    priceDisplay.textContent = displayText;
-}
-
-tierSelect.addEventListener('change', updatePrice);
-billingCycle.addEventListener('change', updatePrice);
-
-// ----------------- Copy Polygon Wallet -----------------
-copyPolygonBtn.addEventListener('click', () => {
-    const wallet = document.getElementById('polygon-wallet');
-    wallet.select();
-    document.execCommand('copy');
-    alert('Polygon address copied!');
-});
-
-// ----------------- Polygon Gas Fee -----------------
-async function updatePolygonGasFee() {
-    const gasFeeEl = document.getElementById('polygon-gas-fee');
-    try {
-        const gasResponse = await fetch('https://gasstation.polygon.technology/v2');
-        const gasData = await gasResponse.json();
-        const fastGasGwei = gasData.fast.maxFee;
-
-        const priceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd');
-        const priceData = await priceResponse.json();
-        const maticUsd = priceData['matic-network'].usd;
-
-        const gasMatic = fastGasGwei / 1e18;
-        const gasUsd = gasMatic * maticUsd;
-
-        gasFeeEl.textContent = `Estimated Gas Fee: ${gasMatic.toFixed(6)} MATIC (~$${gasUsd.toFixed(2)} USD)`;
-    } catch (err) {
-        console.error(err);
-        gasFeeEl.textContent = "Estimated Gas Fee: Unavailable";
-    }
-}
-
-// Auto-update every 15s when Polygon is selected
-setInterval(() => {
-    if(paymentType.value === 'polygon') updatePolygonGasFee();
-}, 15000);
-
-// ----------------- Payment Type Toggle -----------------
-paymentType.addEventListener('change', () => {
-    paypalContainer.innerHTML = '';
-    polygonSection.style.display = cashSection.style.display = 'none';
-
-    if(paymentType.value === 'paypal' && tierSelect.value) {
-        renderPayPalButton(getFinalAmount());
-    }
-    if(paymentType.value === 'polygon') {
-        polygonSection.style.display = 'block';
-        updatePolygonGasFee();
-    }
-    if(paymentType.value === 'cash') {
-        cashSection.style.display = 'block';
-    }
-});
-
-// ----------------- Final Amount -----------------
-function getFinalAmount() {
-    const basePrice = parseFloat(tierSelect.value);
-    if(!basePrice) return null;
-    let amount = basePrice;
-
-    if(billingCycle.value === 'annual') amount *= 12;
-    if(billingCycle.value === 'monthly' && amount < 5) {
-        alert('Monthly payments are only available for $5 and above.');
-        return null;
-    }
-    return amount;
-}
-
-// ----------------- PayPal Button -----------------
-function renderPayPalButton(amount) {
-    if(!amount) return;
-    paypalContainer.innerHTML = "";
-    paypal.Buttons({
-        createOrder: (data, actions) => actions.order.create({
-            purchase_units: [{ amount: { value: amount } }]
-        }),
-        onApprove: (data, actions) => actions.order.capture().then(details => {
-            alert('Transaction completed by ' + details.payer.name.given_name);
-        })
-    }).render('#paypal-button-container');
-}
-
-// ----------------- Form Submission -----------------
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const finalAmount = getFinalAmount();
-    if(finalAmount === null) return;
-
-    const payment = paymentType.value;
-
-    // Validate Cash
-    if(payment === 'cash' && cashCodeInput.value.trim() !== MASTER_CASH_CODE) {
-        return alert('Invalid cash code.');
-    }
-
-    // Validate Polygon
-    if(payment === 'polygon' && !polygonHashInput.value.trim()) {
-        return alert('Enter Polygon transaction hash.');
-    }
-
-    // PayPal handled separately
-    if(payment === 'paypal') return renderPayPalButton(finalAmount);
-
-    // Collect form data
-    const businessData = {
-        name: document.getElementById('business-name').value,
-        ein: document.getElementById('business-ein').value,
-        email: document.getElementById('business-email').value,
-        phone: document.getElementById('business-phone').value,
-        address: document.getElementById('business-address').value,
-        city: document.getElementById('business-city').value,
-        state: document.getElementById('business-state').value,
-        zip: document.getElementById('business-zip').value,
-        tier: tierSelect.value,
-        billingCycle: billingCycle.value,
-        paymentType: payment,
-        cashCode: cashCodeInput.value.trim(),
-        polygonHash: polygonHashInput.value.trim()
-    };
-
-    try {
-        const response = await fetch('https://api.braxendevelopment.work/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(businessData)
-        });
-        if(!response.ok) throw new Error('Network error');
-        alert(`Form submitted successfully for ${payment.toUpperCase()}.\nAmount: $${finalAmount.toFixed(2)}`);
-    } catch(err) {
-        console.error(err);
-        alert('Error submitting data. Try again.');
-    }
-});
-</script>
-
-
-
-  </main>
-
-<!-- Optional footer -->
 <footer style="text-align:center; margin:20px; color:#888;">
   &copy; 2025 Braxen Development. All rights reserved.
 </footer>
 
+<script src="quarterclub.js"></script>
 </body>
-</html>
+    </html>
