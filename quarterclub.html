@@ -328,53 +328,64 @@ paymentType.addEventListener('change', () => {
         polygonSection.style.display = 'none';
     }
 });
-
-// Form submission
 form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const finalAmount = getFinalAmount();
-  if(finalAmount === null) return;
+    e.preventDefault();
 
-  const payment = paymentType.value;
+    const finalAmount = getFinalAmount();
+    if(finalAmount === null) return;
 
-  if(payment === 'cash') {
-    if(cashCodeInput.value !== MASTER_CASH_CODE) {
-      alert('Invalid cash code.');
-      return;
+    const payment = paymentType.value;
+
+    // Validate Cash
+    if(payment === 'cash') {
+        if(cashCodeInput.value !== MASTER_CASH_CODE) {
+            alert('Invalid cash code. Payment cannot be completed.');
+            return;
+        }
     }
-  }
 
-  if(payment === 'polygon') {
-    if(!polygonHashInput.value.trim()) {
-      alert('Enter your Polygon transaction hash before submitting.');
-      return;
+    // Validate Polygon
+    if(payment === 'polygon') {
+        const txHash = polygonHashInput.value.trim();
+        if(!txHash) {
+            alert('Enter your Polygon transaction hash before submitting.');
+            return;
+        }
+
+        const gasEl = document.getElementById('polygon-gas-fee');
+        if(gasEl.textContent.includes("Unavailable")) {
+            alert('Polygon gas fee is currently unavailable. Please try again later.');
+            return;
+        }
     }
-  }
 
-  if(payment === 'paypal') {
-    if(!tierSelect.value) return alert('Select a tier before submitting PayPal payment.');
-    renderPayPalButton(finalAmount);
-    return;
-  }
+    // PayPal
+    if(payment === 'paypal') {
+        if(!tierSelect.value) return alert('Select a tier before submitting PayPal payment.');
+        renderPayPalButton(finalAmount);
+        return; // Wait for PayPal approval
+    }
 
-  const businessData = {
-    name: document.getElementById('business-name').value,
-    ein: document.getElementById('business-ein').value,
-    email: document.getElementById('business-email').value,
-    phone: document.getElementById('business-phone').value,
-    address: document.getElementById('business-address').value,
-    city: document.getElementById('business-city').value,
-    state: document.getElementById('business-state').value,
-    zip: document.getElementById('business-zip').value,
-    tier: tierSelect.value,
-    billingCycle: billingCycle.value,
-    paymentType: payment,
-    cashCode: cashCodeInput.value.trim(),
-    polygonHash: polygonHashInput.value.trim()
-  };
+    // Record form data (POST to Worker API)
+    const businessData = {
+        name: document.getElementById('business-name').value,
+        ein: document.getElementById('business-ein').value,
+        email: document.getElementById('business-email').value,
+        phone: document.getElementById('business-phone').value,
+        address: document.getElementById('business-address').value,
+        city: document.getElementById('business-city').value,
+        state: document.getElementById('business-state').value,
+        zip: document.getElementById('business-zip').value,
+        tier: tierSelect.value,
+        billingCycle: billingCycle.value,
+        paymentType: payment,
+        cashCode: cashCodeInput.value.trim(),
+        polygonHash: polygonHashInput.value.trim()
+    };
 
-  // ...previous code above remains the same...
-
+    alert(`Payment data recorded successfully for ${payment.toUpperCase()}.\nAmount: $${finalAmount.toFixed(2)}`);
+    // Optional: send to Worker API via fetch
+});
   // Optional: POST to Worker API
   try {
     const response = await fetch('https://api.braxendevelopment.work/', {
