@@ -241,21 +241,132 @@ if (tierSelect.value === '10_pdf') {
   if(businessData.paymentType === 'cash') {
     if(businessData.cashCode !== MASTER_CASH_CODE) {
       showMessage("Invalid cash code. Cannot submit.", "error");
+// --- Grab elements ---
+const tierSelect = document.getElementById('tier-select');
+const paymentType = document.getElementById('payment-type');
+const paypalContainer = document.getElementById('paypal-button-container');
+const form = document.getElementById('quarterclub-form');
+
+// --- Create hidden inputs for cash code & polygon hash ---
+const cashCodeInput = document.createElement('input');
+cashCodeInput.type = 'text';
+cashCodeInput.id = 'cash-code';
+cashCodeInput.placeholder = 'Enter your cash transaction code';
+cashCodeInput.style.display = 'none';
+cashCodeInput.required = true;
+
+const cashCodeLabel = document.createElement('label');
+cashCodeLabel.htmlFor = 'cash-code';
+cashCodeLabel.innerText = 'Enter Cash Code:';
+cashCodeLabel.style.display = 'none';
+
+const polygonHashInput = document.createElement('input');
+polygonHashInput.type = 'text';
+polygonHashInput.id = 'polygon-hash';
+polygonHashInput.placeholder = 'Enter Polygon transaction hash';
+polygonHashInput.style.display = 'none';
+polygonHashInput.required = true;
+
+const polygonHashLabel = document.createElement('label');
+polygonHashLabel.htmlFor = 'polygon-hash';
+polygonHashLabel.innerText = 'Enter Polygon Transaction Hash:';
+polygonHashLabel.style.display = 'none';
+
+// Insert these before the submit button
+const submitButton = form.querySelector('button[type="submit"]');
+form.insertBefore(cashCodeLabel, submitButton);
+form.insertBefore(cashCodeInput, submitButton);
+form.insertBefore(polygonHashLabel, submitButton);
+form.insertBefore(polygonHashInput, submitButton);
+
+// --- PayPal Button ---
+function renderPayPalButton(amount) {
+  paypalContainer.innerHTML = "";
+  if(!amount) return;
+  paypal.Buttons({
+    createOrder: (data, actions) => actions.order.create({
+      purchase_units: [{ amount: { value: amount } }]
+    }),
+    onApprove: (data, actions) => actions.order.capture().then(details => {
+      alert('Transaction completed by ' + details.payer.name.given_name);
+    })
+  }).render('#paypal-button-container');
+}
+
+// --- Payment type change ---
+paymentType.addEventListener('change', () => {
+  const type = paymentType.value;
+  paypalContainer.innerHTML = "";
+  
+  // Hide both hidden inputs first
+  cashCodeInput.style.display = "none";
+  cashCodeLabel.style.display = "none";
+  polygonHashInput.style.display = "none";
+  polygonHashLabel.style.display = "none";
+
+  if(type === 'paypal' && tierSelect.value) renderPayPalButton(tierSelect.value);
+  
+  if(type === 'cash') {
+    cashCodeInput.style.display = "block";
+    cashCodeLabel.style.display = "block";
+    alert("Please enter your cash transaction code to complete payment.");
+  }
+
+  if(type === 'polygon') {
+    polygonHashInput.style.display = "block";
+    polygonHashLabel.style.display = "block";
+    alert(`Send payment to your Polygon Wallet and paste the transaction hash here.`);
+  }
+});
+
+// --- Tier change (updates PayPal if selected) ---
+tierSelect.addEventListener('change', () => {
+  if(paymentType.value === 'paypal') renderPayPalButton(tierSelect.value);
+});
+
+// --- Form submission ---
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const businessData = {
+    name: document.getElementById('business-name').value,
+    ein: document.getElementById('business-ein').value,
+    email: document.getElementById('business-email').value,
+    phone: document.getElementById('business-phone').value,
+    address: document.getElementById('business-address').value,
+    city: document.getElementById('business-city').value,
+    state: document.getElementById('business-state').value,
+    zip: document.getElementById('business-zip').value,
+    tier: tierSelect.value,
+    paymentType: paymentType.value,
+    cashCode: cashCodeInput.value.trim(),
+    polygonHash: polygonHashInput.value.trim()
+  };
+
+  if(!businessData.tier || !businessData.paymentType) {
+    alert("Please select a tier and payment method.");
+    return;
+  }
+
+  // Validate cash code
+  if(businessData.paymentType === 'cash') {
+    if(businessData.cashCode !== MASTER_CASH_CODE) {
+      alert("Invalid cash code. Payment cannot be completed.");
       return;
     }
   }
 
-  // Polygon validation
+  // Validate Polygon hash
   if(businessData.paymentType === 'polygon') {
     if(!businessData.polygonHash) {
-      showMessage("Please enter your Polygon transaction hash.", "error");
+      alert("Please enter your Polygon transaction hash to complete payment.");
       return;
     }
   }
 
-  // PayPal validation: ensure user has clicked PayPal button
-  if(businessData.paymentType === 'paypal' && !paypalContainer.innerHTML) {
-    showMessage("Please complete the PayPal payment before submitting.", "error");
+  // PayPal validation (optional)
+  if(businessData.paymentType === 'paypal' && !tierSelect.value) {
+    alert("Please select a tier for PayPal payment.");
     return;
   }
 
@@ -265,12 +376,10 @@ if (tierSelect.value === '10_pdf') {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(businessData)
     });
-
-    if(!response.ok) throw new Error('Network error');
-    showMessage("Form submitted successfully. Thank you for joining The Quarter Club!", "success");
+    if(!response.ok) throw new Error('Network response was not ok');
+    alert("Form submitted successfully. Thank you for joining The Quarter Club!");
   } catch(err) {
-    console.error(err);
-    showMessage("Error submitting form. Please try again.", "error");
+    console.error('Error submitting form:', err);
+    alert('There was an error submitting your data. Please try again.');
   }
 });
-</script>
