@@ -1,60 +1,185 @@
-/* style.css - global dark theme */
-:root{
-  --bg:#000;
-  --panel:#111;
-  --muted:#888;
-  --accent:#0af;
-  --btn:#007bff;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:var(--bg);
-  color:#fff;
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+/* General Styles */
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
 }
 
-/* Header / Nav */
-header nav{background:var(--panel); border-bottom:1px solid #222; padding:12px 20px}
-nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0; align-items:center}
-nav a{color:#fff; text-decoration:none; font-weight:600}
-nav a.active{color:var(--accent)}
+a {
+  color: #fff;
+  text-decoration: none;
+}
 
-/* Layout */
-.container{max-width:1000px; margin:24px auto; padding:20px}
-.card{background:var(--panel); padding:18px; border-radius:10px; box-shadow: 0 6px 20px rgba(0,0,0,0.6)}
-h1,h2,h3{color:#fff; margin:0 0 12px 0}
-p{color:#ddd; margin:0 0 12px 0}
-small{color:var(--muted)}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Header & Navigation */
+header {
+  background-color: #000;
+  border-bottom: 1px solid #333;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  margin: 0;
+}
+
+nav ul li {
+  margin-right: 1.5rem;
+}
+
+nav ul li:last-child {
+  margin-right: 0;
+}
+
+nav a {
+  color: #fff;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #ccc;
+}
+
+/* Main Content */
+main {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Headings */
+h1, h2, h3 {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+/* Sections */
+section {
+  margin-bottom: 3rem;
+}
 
 /* Forms */
-select,input,textarea,button{
-  font-size:15px;
-  border-radius:8px;
-  border:1px solid #333;
-  background:#111;
-  color:#fff;
-  padding:10px 12px;
-  outline:none;
+form input[type="text"], form input[type="email"], form select, form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #111;
+  color: #fff;
 }
-label{display:block; margin:10px 0 6px; color:#ddd}
-.form-row{display:flex; gap:10px; align-items:center}
-.form-row .flex-1{flex:1}
-button{cursor:pointer}
-.btn{background:var(--btn); color:#fff; border:none; padding:10px 14px; border-radius:8px}
-.btn-outline{background:transparent;border:1px solid #444;color:#fff;padding:9px 12px;border-radius:8px}
-.small{padding:6px 8px;font-size:14px}
 
-/* Responsive */
-@media (max-width:720px){
-  .form-row{flex-direction:column}
-  nav ul{flex-wrap:wrap}
-  .container{padding:14px}
+form input:focus, form select:focus, form textarea:focus {
+  outline: none;
+  border-color: #666;
+}
+
+form button {
+  background-color: #fff;
+  color: #000;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+form button:hover {
+  background-color: #ccc;
+}
+
+/* Dropdowns */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #111;
+  color: #fff;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #666;
+}
+
+/* Cards / Boxes (for payments) */
+.card {
+  background-color: #111;
+  color: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+.card code {
+  word-break: break-all;
+  background-color: #222;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* Buttons in cards */
+.card button {
+  background-color: #fff;
+  color: #000;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+}
+
+.card button:hover {
+  background-color: #ccc;
 }
 
 /* Footer */
-footer{background:var(--panel); padding:14px 20px; text-align:center; border-top:1px solid #222; color:var(--muted)}
+footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid #333;
+  font-size: 0.9rem;
+}
+
+/* Alerts / Error Messages */
+.error {
+  color: #ff4d4d;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  nav ul li {
+    margin-bottom: 0.75rem;
+  }
+
+  nav ul li:last-child {
+    margin-bottom: 0;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
