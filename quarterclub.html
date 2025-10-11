@@ -19,80 +19,131 @@
     </nav>
   </header>
 
-  <main class="px-6 py-12">
-    <!-- About Braxen Development -->
-    <section class="mb-12 max-w-4xl mx-auto text-center">
-      <h1 class="text-4xl font-bold mb-4">Welcome to the Quarter Club</h1>
+  <main class="px-6 py-12 max-w-4xl mx-auto">
+
+    <!-- About Quarter Club -->
+    <section class="mb-12">
+      <h1 class="text-3xl font-bold mb-4">Quarter Club</h1>
       <p class="mb-4">
-        Braxen Development provides solutions to help businesses establish a solid financial foundation. 
-        <a href="quarterclub.html" class="underline">The Quarter Club</a> is designed to rebuild your credit reputation and maintain consistency in your business transactions.
-      </p>
-      <p class="mb-4">
-        For just $10, you can access the <strong>Path to Profit Handbook</strong> — a guide to business growth and financial literacy. 
-        For $25, you receive the handbook and a consultation for business development needs under NDA.
+        The Quarter Club is designed to rebuild credit reputation. Subscription tiers start at $0.25/month ($3/year billed annually) for Founders’ Circle, and scale up through multiple levels.
       </p>
       <p>
-        Subscription tiers start as low as <strong>$0.25/month ($3/year billed annually)</strong> and scale up for those seeking more comprehensive business support.
+        Access the <strong>Path to Profit Handbook</strong> for $10 or combine with a consultation package for $25 under NDA. These resources provide actionable solutions tailored to your business.
       </p>
     </section>
 
-    <!-- Payment Section -->
-    <section id="quarter-club" class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-      
-      <!-- POLYGON PAYMENT -->
-      <div class="bg-white text-black rounded-2xl p-6 shadow-lg">
-        <h2 class="text-xl font-semibold mb-3">Pay with Polygon (MATIC)</h2>
-        <p class="mb-2">Send <strong>$3 in MATIC</strong> to the address below:</p>
-        <div class="flex items-center justify-between bg-gray-100 rounded-lg p-3">
-          <code id="wallet-address" class="text-sm break-all">0x3b8eB1C782F7f33525d34028B7E8fA50a214303f</code>
-          <button onclick="copyAddress()" class="ml-3 px-3 py-1 bg-black text-white rounded">Copy</button>
-        </div>
-
-        <label for="tx-hash" class="block mt-4 mb-1 text-sm">Submit your transaction hash:</label>
-        <input id="tx-hash" type="text" placeholder="0x..." class="w-full p-2 rounded bg-gray-100 text-black border border-gray-300">
-        <button onclick="submitHash()" class="mt-3 w-full bg-black text-white py-2 rounded">Submit</button>
+    <!-- Subscription Tiers -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">Choose Your Subscription Tier</h2>
+      <div class="card">
+        <label for="tier-select">Select Tier:</label>
+        <select id="tier-select">
+          <option value="0.25">Founders’ Circle - $0.25/mo ($3/year)</option>
+          <option value="1">Dollar Bill - $1/mo ($12/year)</option>
+          <option value="2">Bread & Butter - $2/mo ($24/year)</option>
+          <option value="5">Startup Lane - $5/mo</option>
+          <option value="10">Builder’s Foundation - $10/mo</option>
+          <option value="20">Growth Track - $20/mo</option>
+          <option value="50">Pro Business - $50/mo</option>
+          <option value="100">Executive Class - $100/mo</option>
+        </select>
       </div>
-
-      <!-- PAYPAL PAYMENT -->
-      <div class="bg-white text-black rounded-2xl p-6 shadow-lg">
-        <h2 class="text-xl font-semibold mb-3">Pay with PayPal</h2>
-        <p class="mb-2">Prefer PayPal? Make a secure one-time payment of $3 below.</p>
-        <div id="paypal-button-container"></div>
-      </div>
-
     </section>
+
+    <!-- PayPal Payment -->
+    <section class="card mb-12">
+      <h2 class="mb-2">Pay via PayPal</h2>
+      <p class="mb-4">Use PayPal to pay your selected subscription tier.</p>
+      <div id="paypal-button-container"></div>
+      <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
+      <script>
+        const tierSelect = document.getElementById('tier-select');
+        paypal.Buttons({
+          style: { layout: 'vertical', color: 'white', shape: 'rect', label: 'pay' },
+          createOrder: function(data, actions) {
+            return actions.order.create({
+              purchase_units: [{
+                amount: { value: tierSelect.value }
+              }]
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+              alert('Transaction completed by ' + details.payer.name.given_name);
+              // Send details to Worker
+              fetch('https://api.braxendevelopment.work/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  paymentType: 'paypal',
+                  tier: tierSelect.value,
+                  payerEmail: details.payer.email_address
+                })
+              });
+            });
+          }
+        }).render('#paypal-button-container');
+      </script>
+    </section>
+
+    <!-- Polygon Crypto Payment -->
+    <section class="card mb-12">
+      <h2 class="mb-2">Pay via Polygon (USDC)</h2>
+      <p class="mb-4">Copy the wallet address below and send your payment. Submit the transaction hash once completed.</p>
+      <code id="polygon-address">0x3b8eB1C782F7f33525d34028B7E8fA50a214303f</code>
+      <form id="polygon-form" class="mt-4">
+        <label for="txn-hash">Transaction Hash:</label>
+        <input type="text" id="txn-hash" placeholder="Enter transaction hash" required>
+        <button type="submit">Submit Hash</button>
+      </form>
+      <span id="hash-error" class="error" style="display:none;">Invalid transaction hash.</span>
+    </section>
+
   </main>
 
   <footer class="text-center py-6 border-t border-gray-700">
-    <p>Contact: <a href="mailto:support@braxendevelopment.work">support@braxendevelopment.work</a></p>
+    <p>Contact: <a href="mailto:billing@braxendevelopment.work">billing@braxendevelopment.work</a></p>
   </footer>
 
-  <!-- Scripts -->
-  <script src="https://www.paypal.com/sdk/js?client-id={{PAYPAL_CLIENT_ID}}&currency=USD"></script>
   <script>
-    function copyAddress() {
-      const addr = document.getElementById('wallet-address').textContent;
-      navigator.clipboard.writeText(addr);
-      alert('Polygon address copied!');
-    }
+    const polygonForm = document.getElementById('polygon-form');
+    const hashError = document.getElementById('hash-error');
+    const WORKER_ENDPOINT = "https://api.braxendevelopment.work/";
 
-    function submitHash() {
-      const hash = document.getElementById('tx-hash').value.trim();
-      if (!hash) return alert('Please enter a transaction hash.');
-      alert('Transaction hash submitted. Verification pending.');
-      // Later connect this to your Worker API for validation
-    }
+    polygonForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hashError.style.display = "none";
 
-    paypal.Buttons({
-      style: { color: 'black', shape: 'rect', label: 'pay', height: 40 },
-      createOrder: (data, actions) => actions.order.create({
-        purchase_units: [{ amount: { value: '3.00' }, description: 'Quarter Club Membership ($3/year)' }]
-      }),
-      onApprove: (data, actions) => actions.order.capture().then(() => {
-        alert('Payment successful! Welcome to the Quarter Club.');
-      }),
-      onError: err => alert('Payment failed: ' + err)
-    }).render('#paypal-button-container');
+      const hash = document.getElementById('txn-hash').value.trim();
+      if (!hash) {
+        hashError.style.display = "inline";
+        return;
+      }
+
+      try {
+        const response = await fetch(WORKER_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            paymentType: 'polygon',
+            txnHash: hash,
+            tier: tierSelect.value
+          })
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          hashError.innerText = result.error || "Submission failed.";
+          hashError.style.display = "inline";
+        } else {
+          alert("Transaction verified! Transaction ID: " + result.txnId);
+          polygonForm.reset();
+        }
+      } catch (err) {
+        hashError.innerText = "Network error. Try again later.";
+        hashError.style.display = "inline";
+      }
+    });
   </script>
+
 </body>
 </html>
