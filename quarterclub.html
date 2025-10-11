@@ -111,6 +111,8 @@
   <label for="tier-select">Select Tier:</label>
   <select id="tier-select" required>
     <option value="">Select a Tier</option>
+  <option value="25_package">Package Deal ($25)</option>
+  <option value="10_pdf">Path to Profit Handbook ($10)</option>
     <option value="0.25">Founders’ Circle ($0.25/mo, billed $3/yr)</option>
     <option value="1">Dollar Bill ($1/mo, billed $12/yr)</option>
     <option value="2">Bread & Butter ($2/mo, billed $24/yr)</option>
@@ -221,7 +223,11 @@ form.addEventListener('submit', async (e) => {
     alert("Please select a tier and payment method.");
     return;
   }
-
+if (businessData.tier === "10_pdf") {
+  // Flag PDF to be sent
+} else if (businessData.tier === "25_package") {
+  // Handle package deal
+}
   // Cash validation
   if(businessData.paymentType === 'cash') {
     if(businessData.cashCode !== MASTER_CASH_CODE) {
