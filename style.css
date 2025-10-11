@@ -1,84 +1,122 @@
-<style>
-  /* Global Black & White Theme */
-  body {
-    background-color: #000;
-    color: #fff;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
+/* Body & Global */
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
-  header, nav, footer {
-    background-color: #000;
-    color: #fff;
-    padding: 1rem 2rem;
-    text-align: center;
-  }
+/* Navigation */
+nav {
+  background-color: #000;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-  }
+nav h1 {
+  margin: 0;
+  font-size: 24px;
+}
 
-  nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.2s ease;
-  }
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 30px;
+}
 
-  nav ul li a:hover {
-    color: #ccc;
-  }
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
 
-  form {
-    background-color: #000;
-    color: #fff;
-    border: 2px solid #fff;
-    border-radius: 12px;
-    padding: 2rem;
-    max-width: 600px;
-    margin: 2rem auto;
-  }
+nav a:hover {
+  text-decoration: underline;
+}
 
-  label {
-    display: block;
-    margin-top: 1rem;
-    font-weight: 600;
-  }
+/* Sections */
+section {
+  margin: 20px;
+}
 
-  input, select, button, textarea {
-    width: 100%;
-    padding: 0.75rem;
-    margin-top: 0.5rem;
-    background-color: #111;
-    color: #fff;
-    border: 1px solid #fff;
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
+/* Hero Section */
+.hero {
+  text-align: center;
+  margin: 40px 20px;
+}
 
-  button {
-    background-color: #fff;
-    color: #000;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
+.hero h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
 
-  button:hover {
-    background-color: #ccc;
-  }
+.hero p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
 
-  /* Always horizontal navbar on mobile too */
-  @media (max-width: 768px) {
-    nav ul {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-    }
-  }
-</style>
+.hero .cta {
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 12px 24px;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hero .cta:hover {
+  background-color: #fff;
+  color: #000;
+  transition: 0.3s;
+}
+
+/* About Section */
+.about h1, .about h2 {
+  margin-top: 20px;
+}
+
+.about p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.about a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  margin-top: 40px;
+}
+
+/* Buttons & Inputs (if used later) */
+button, input, select {
+  padding: 8px;
+  font-size: 14px;
+  display: block;
+  margin: 10px 0;
+  color: #000;
+}
+
+button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #fff;
+  color: #000;
+  transition: 0.3s;
+}
