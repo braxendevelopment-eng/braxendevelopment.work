@@ -1,68 +1,78 @@
-/* ------------------ Form Labels ------------------ */
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    background-color: #000;
+    padding: 10px 20px;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 30px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+section {
+    margin: 20px;
+}
+
+/* Form Labels and Inputs */
 form label {
-    color: #fff;           /* Labels remain white to pop on dark background */
-    display: block;        /* Each label sits above its input */
-    margin: 10px 0 5px;    /* Space above and below labels */
-    font-weight: bold;     /* Bold so the labels are clearly visible */
-}
-
-/* ------------------ Input Fields ------------------ */
-form input,
-form select,
-form textarea {
-    display: block;           /* Stack inputs vertically */
-    width: 100%;              /* Stretch across the form container */
-    padding: 10px;            /* Inner spacing so text isn’t cramped */
-    font-size: 14px;          /* Standard readable text size */
-    margin-bottom: 15px;      /* Space below input */
-    border-radius: 5px;       /* Rounded corners for style */
-    border: 1px solid #555;   /* Subtle border to define input area */
-    box-sizing: border-box;   /* Prevent padding from breaking width */
-    color: #fff;              /* Text user types is now white */
-    background-color: #111;   /* Input boxes are dark for full dark mode */
-}
-
-/* ------------------ Focused Inputs ------------------ */
-form input:focus,
-form select:focus,
-form textarea:focus {
-    outline: none;             /* Remove default browser focus outline */
-    border-color: #00ffcc;     /* Highlight border in teal */
-    box-shadow: 0 0 5px #00ffcc; /* Glow effect when typing */
-}
-
-/* ------------------ Buttons ------------------ */
-form button {
+    color: #fff; /* White labels */
+    font-weight: bold;
     display: block;
-    width: 100%;              
+    margin: 10px 0 5px;
+}
+
+form input, form select, form button {
+    display: block;
+    width: 100%;
     padding: 10px;
     font-size: 14px;
     margin-bottom: 15px;
     border-radius: 5px;
-    background-color: #000;   /* Button matches page background */
-    color: #00ffcc;           /* Button text in teal */
-    border: 1px solid #00ffcc; 
-    cursor: pointer;          
-    transition: all 0.3s;    
+    border: 1px solid #555;
+    box-sizing: border-box;
+    background-color: #000; /* Black inputs */
+    color: #fff; /* White typed text */
+}
+
+form input:focus, form select:focus {
+    outline: none;
+    border-color: #00ffcc;
+    box-shadow: 0 0 5px #00ffcc;
+}
+
+form button {
+    background-color: #111;
+    color: #00ffcc;
+    border: 1px solid #00ffcc;
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
 form button:hover {
-    background-color: #00ffcc; /* Hover changes background to teal */
-    color: #000;               /* Hover text switches to black */
-    border: 1px solid #000;    
+    background-color: #00ffcc;
+    color: #000;
 }
 
-/* ------------------ Payment Sections ------------------ */
-#polygon-section, #cash-section {
-    margin-top: 20px;          /* Space above these sections */
+#paypal-button-container, #polygon-section, #cash-section {
+    margin-top: 20px;
 }
 
-#polygon-wallet, #cash-code {
-    width: 100%;               /* Full width inputs */
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background-color: #111;    /* Dark box */
-    color: #fff;               /* Typed text is white */
+#polygon-wallet {
+    width: 100%;
 }
