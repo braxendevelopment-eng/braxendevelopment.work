@@ -83,19 +83,32 @@ form.addEventListener('submit', async (e) => {
         businessData[el.id] = el.value;
     });
 
-    try {
-        const response = await fetch('https://api.braxendevelopment.work/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(businessData)
-        });
-        if (!response.ok) throw new Error('Network error');
-        alert(`Form submitted successfully.\nAmount: $${finalAmount}`);
-    } catch (err) {
-        console.error(err);
-        alert('Error submitting data. Try again.');
+    fetch("https://submission-logger.braxendevelopment.workers.dev/", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    businessName,
+    ein,
+    email,
+    phone,
+    address,
+    city,
+    state,
+    zip,
+    paymentMethod
+  })
+})
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert(`✅ Submission successful! Receipt: ${data.receipt}`);
+    } else {
+      alert(`❌ Error: ${data.error}`);
     }
-});
+  })
+  .catch(err => {
+    alert(`⚠️ Network Error: ${err.message}`);
+  }
 
 // Event Listeners
 tierSelect.addEventListener('change', updatePrice);
