@@ -1,73 +1,68 @@
 /* ------------------ Form Labels ------------------ */
-/* Labels tell the user what to type. They need to pop against our black background. */
 form label {
-    color: #fff;           /* White text so it’s visible on dark background */
-    display: block;        /* Makes label take up full width, so it sits above input nicely */
-    margin: 10px 0 5px;    /* Adds space above and below label: 10px top, 0 left/right, 5px bottom */
-    font-weight: bold;     /* Makes the label text stand out like a boss */
+    color: #fff;           /* Labels remain white to pop on dark background */
+    display: block;        /* Each label sits above its input */
+    margin: 10px 0 5px;    /* Space above and below labels */
+    font-weight: bold;     /* Bold so the labels are clearly visible */
 }
 
 /* ------------------ Input Fields ------------------ */
-/* Inputs are where the user types. Keep text readable, light background for contrast. */
 form input,
 form select,
 form textarea {
-    display: block;           /* Stack them vertically (not like a messed-up burger menu) */
-    width: 100%;              /* Stretch inputs to full width of form container */
-    padding: 10px;            /* Space inside the input so text isn’t squished */
+    display: block;           /* Stack inputs vertically */
+    width: 100%;              /* Stretch across the form container */
+    padding: 10px;            /* Inner spacing so text isn’t cramped */
     font-size: 14px;          /* Standard readable text size */
-    margin-bottom: 15px;      /* Space after input before next element */
-    border-radius: 5px;       /* Rounded corners, because sharp corners are so 1999 */
-    border: 1px solid #555;   /* Dark gray border to define the input area */
-    box-sizing: border-box;   /* Ensures padding doesn’t make inputs overflow */
-    color: #000;              /* The text user types is black—legible on white background */
-    background-color: #fff;   /* White input background to contrast dark page */
+    margin-bottom: 15px;      /* Space below input */
+    border-radius: 5px;       /* Rounded corners for style */
+    border: 1px solid #555;   /* Subtle border to define input area */
+    box-sizing: border-box;   /* Prevent padding from breaking width */
+    color: #fff;              /* Text user types is now white */
+    background-color: #111;   /* Input boxes are dark for full dark mode */
 }
 
 /* ------------------ Focused Inputs ------------------ */
-/* When user clicks or tabs into an input, highlight it like a spotlight */
 form input:focus,
 form select:focus,
 form textarea:focus {
-    outline: none;             /* Remove default browser outline, because we’re classy */
-    border-color: #00ffcc;     /* Teal-ish highlight for focus */
-    box-shadow: 0 0 5px #00ffcc; /* Slight glow around input for emphasis */
+    outline: none;             /* Remove default browser focus outline */
+    border-color: #00ffcc;     /* Highlight border in teal */
+    box-shadow: 0 0 5px #00ffcc; /* Glow effect when typing */
 }
 
 /* ------------------ Buttons ------------------ */
-/* Submit button needs to look like it means business */
 form button {
     display: block;
-    width: 100%;              /* Full width—no tiny awkward buttons */
+    width: 100%;              
     padding: 10px;
     font-size: 14px;
     margin-bottom: 15px;
     border-radius: 5px;
-    background-color: #000;   /* Match page background */
-    color: #00ffcc;           /* Bright teal text, stands out like neon lights */
-    border: 1px solid #00ffcc; /* Matches text, keeps it consistent */
-    cursor: pointer;          /* Mouse turns to pointer—classic button behavior */
-    transition: all 0.3s;    /* Smooth hover effect, because abrupt is rude */
+    background-color: #000;   /* Button matches page background */
+    color: #00ffcc;           /* Button text in teal */
+    border: 1px solid #00ffcc; 
+    cursor: pointer;          
+    transition: all 0.3s;    
 }
 
 form button:hover {
-    background-color: #00ffcc; /* Background becomes bright on hover */
-    color: #000;               /* Text switches to black for contrast */
-    border: 1px solid #000;    /* Border matches new text color, sleek */
+    background-color: #00ffcc; /* Hover changes background to teal */
+    color: #000;               /* Hover text switches to black */
+    border: 1px solid #000;    
 }
 
 /* ------------------ Payment Sections ------------------ */
-/* Ensure the polygon and cash sections inherit similar style */
 #polygon-section, #cash-section {
-    margin-top: 20px;          /* Separate from form fields */
+    margin-top: 20px;          /* Space above these sections */
 }
 
-#polygon-wallet {
-    width: 100%;               /* Full width for wallet address input */
-    padding: 10px;             /* Make it feel like an input, not a postage stamp */
+#polygon-wallet, #cash-code {
+    width: 100%;               /* Full width inputs */
+    padding: 10px;
     font-size: 14px;
     border-radius: 5px;
     border: 1px solid #555;
-    background-color: #fff;
-    color: #000;
+    background-color: #111;    /* Dark box */
+    color: #fff;               /* Typed text is white */
 }
