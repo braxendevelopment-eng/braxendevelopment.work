@@ -1,120 +1,98 @@
-<section id="quarter-club" class="min-h-screen bg-black text-white p-8">
-  <h1 class="text-4xl font-bold mb-4 text-center">The Quarter Club</h1>
-  <p class="text-center mb-6 max-w-3xl mx-auto">
-    The Quarter Club is designed to help businesses strengthen their financial credibility and reputation for just <strong>$0.25/month</strong>.
-    Subscriptions are billed annually at <strong>$3/year</strong> and reported to business credit bureaus, helping entrepreneurs build a lasting record of reliability.
-    Braxen Development also offers <strong>the Path to Profit Handbook</strong> for $10 — a toolkit of practical strategies to elevate your financial literacy.
-  </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quarter Club | Braxen Development</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-black text-white">
 
-  <!-- Pricing tiers -->
-  <div class="flex flex-wrap justify-center gap-6 mb-10">
-    <select id="tierSelect" class="bg-gray-900 border border-gray-700 text-white rounded-lg p-3">
-      <option disabled selected>Select a Subscription Tier</option>
-      <option value="founders_circle_annual">$0.25/mo (Billed $3/yr) – Founders’ Circle</option>
-      <option value="dollar_bill_annual">$1/mo (Billed $12/yr) – Dollar Bill</option>
-      <option value="bread_butter_annual">$2/mo (Billed $24/yr) – Bread & Butter</option>
-      <option value="startup_lane">$5/mo – Startup Lane</option>
-      <option value="builders_foundation">$10/mo – Builder’s Foundation</option>
-      <option value="growth_track">$20/mo – Growth Track</option>
-      <option value="pro_business">$50/mo – Pro Business</option>
-      <option value="executive_class">$100/mo – Executive Class</option>
-    </select>
-  </div>
+  <!-- Header & Navigation -->
+  <header>
+    <nav class="p-4 bg-black">
+      <ul class="flex space-x-6 text-white">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="quarterclub.html" class="font-bold">Quarter Club</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <!-- Payment Method Selection -->
-  <div class="text-center mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Choose Payment Method</h2>
-    <div class="flex justify-center gap-4">
-      <button id="payWithPayPal" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">Pay with PayPal</button>
-      <button id="payWithCrypto" class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold">Pay with Polygon (USDC)</button>
-    </div>
-  </div>
+  <main class="px-6 py-12">
+    <!-- About Braxen Development -->
+    <section class="mb-12 max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl font-bold mb-4">Welcome to the Quarter Club</h1>
+      <p class="mb-4">
+        Braxen Development provides solutions to help businesses establish a solid financial foundation. 
+        <a href="quarterclub.html" class="underline">The Quarter Club</a> is designed to rebuild your credit reputation and maintain consistency in your business transactions.
+      </p>
+      <p class="mb-4">
+        For just $10, you can access the <strong>Path to Profit Handbook</strong> — a guide to business growth and financial literacy. 
+        For $25, you receive the handbook and a consultation for business development needs under NDA.
+      </p>
+      <p>
+        Subscription tiers start as low as <strong>$0.25/month ($3/year billed annually)</strong> and scale up for those seeking more comprehensive business support.
+      </p>
+    </section>
 
-  <!-- Polygon Payment Section -->
-  <div id="cryptoPaymentSection" class="hidden text-center border-t border-gray-700 pt-8">
-    <h3 class="text-xl mb-3">Send USDC on Polygon Network</h3>
-    <p>Copy the wallet address below and send your exact payment amount.</p>
+    <!-- Payment Section -->
+    <section id="quarter-club" class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+      
+      <!-- POLYGON PAYMENT -->
+      <div class="bg-white text-black rounded-2xl p-6 shadow-lg">
+        <h2 class="text-xl font-semibold mb-3">Pay with Polygon (MATIC)</h2>
+        <p class="mb-2">Send <strong>$3 in MATIC</strong> to the address below:</p>
+        <div class="flex items-center justify-between bg-gray-100 rounded-lg p-3">
+          <code id="wallet-address" class="text-sm break-all">0x3b8eB1C782F7f33525d34028B7E8fA50a214303f</code>
+          <button onclick="copyAddress()" class="ml-3 px-3 py-1 bg-black text-white rounded">Copy</button>
+        </div>
 
-    <div class="mt-4 mb-2">
-      <input type="text" id="polygonAddress" readonly class="bg-gray-900 border border-gray-700 text-white px-3 py-2 rounded w-80 text-center" 
-      value="0x3b8eB1C782F7f33525d34028B7E8fA50a214303f">
-    </div>
-    <button id="copyPolygonAddress" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded mb-4">Copy Address</button>
+        <label for="tx-hash" class="block mt-4 mb-1 text-sm">Submit your transaction hash:</label>
+        <input id="tx-hash" type="text" placeholder="0x..." class="w-full p-2 rounded bg-gray-100 text-black border border-gray-300">
+        <button onclick="submitHash()" class="mt-3 w-full bg-black text-white py-2 rounded">Submit</button>
+      </div>
 
-    <div class="mt-4">
-      <label class="block mb-2 font-semibold">Enter Your Transaction Hash:</label>
-      <input type="text" id="txHash" placeholder="0x..." class="bg-gray-900 border border-gray-700 text-white px-3 py-2 rounded w-80 text-center">
-    </div>
-    <button id="submitTx" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded mt-4">Submit Payment</button>
-  </div>
+      <!-- PAYPAL PAYMENT -->
+      <div class="bg-white text-black rounded-2xl p-6 shadow-lg">
+        <h2 class="text-xl font-semibold mb-3">Pay with PayPal</h2>
+        <p class="mb-2">Prefer PayPal? Make a secure one-time payment of $3 below.</p>
+        <div id="paypal-button-container"></div>
+      </div>
 
-  <!-- PayPal Section -->
-  <div id="paypalSection" class="hidden text-center border-t border-gray-700 pt-8">
-    <h3 class="text-xl mb-3">Pay with PayPal</h3>
-    <div id="paypal-button-container" class="flex justify-center mt-4"></div>
-  </div>
-</section>
+    </section>
+  </main>
 
-<script src="https://www.paypal.com/sdk/js?client-id={{PAYPAL_CLIENT_ID}}&currency=USD"></script>
-<script>
-  const tierSelect = document.getElementById('tierSelect');
-  const cryptoPaymentSection = document.getElementById('cryptoPaymentSection');
-  const paypalSection = document.getElementById('paypalSection');
+  <footer class="text-center py-6 border-t border-gray-700">
+    <p>Contact: <a href="mailto:support@braxendevelopment.work">support@braxendevelopment.work</a></p>
+  </footer>
 
-  document.getElementById('payWithCrypto').addEventListener('click', () => {
-    paypalSection.classList.add('hidden');
-    cryptoPaymentSection.classList.remove('hidden');
-  });
+  <!-- Scripts -->
+  <script src="https://www.paypal.com/sdk/js?client-id={{PAYPAL_CLIENT_ID}}&currency=USD"></script>
+  <script>
+    function copyAddress() {
+      const addr = document.getElementById('wallet-address').textContent;
+      navigator.clipboard.writeText(addr);
+      alert('Polygon address copied!');
+    }
 
-  document.getElementById('payWithPayPal').addEventListener('click', () => {
-    cryptoPaymentSection.classList.add('hidden');
-    paypalSection.classList.remove('hidden');
-    renderPayPalButton();
-  });
-
-  // Copy Polygon Address
-  document.getElementById('copyPolygonAddress').addEventListener('click', () => {
-    const address = document.getElementById('polygonAddress');
-    navigator.clipboard.writeText(address.value);
-    alert("Polygon address copied to clipboard!");
-  });
-
-  // PayPal Integration
-  function renderPayPalButton() {
-    const selectedTier = tierSelect.value;
-    if (!selectedTier) {
-      alert("Please select a tier first.");
-      return;
+    function submitHash() {
+      const hash = document.getElementById('tx-hash').value.trim();
+      if (!hash) return alert('Please enter a transaction hash.');
+      alert('Transaction hash submitted. Verification pending.');
+      // Later connect this to your Worker API for validation
     }
 
     paypal.Buttons({
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            description: selectedTier,
-            amount: { value: getTierAmount(selectedTier) }
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert('Payment completed by ' + details.payer.name.given_name);
-        });
-      }
+      style: { color: 'black', shape: 'rect', label: 'pay', height: 40 },
+      createOrder: (data, actions) => actions.order.create({
+        purchase_units: [{ amount: { value: '3.00' }, description: 'Quarter Club Membership ($3/year)' }]
+      }),
+      onApprove: (data, actions) => actions.order.capture().then(() => {
+        alert('Payment successful! Welcome to the Quarter Club.');
+      }),
+      onError: err => alert('Payment failed: ' + err)
     }).render('#paypal-button-container');
-  }
-
-  function getTierAmount(tier) {
-    const tiers = {
-      "founders_circle_annual": 3,
-      "dollar_bill_annual": 12,
-      "bread_butter_annual": 24,
-      "startup_lane": 5,
-      "builders_foundation": 10,
-      "growth_track": 20,
-      "pro_business": 50,
-      "executive_class": 100
-    };
-    return tiers[tier] || 0;
-  }
-</script>
+  </script>
+</body>
+</html>
