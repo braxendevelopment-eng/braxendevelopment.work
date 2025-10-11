@@ -1,3 +1,4 @@
+// DOM Elements
 const tierSelect = document.getElementById('tier-select');
 const billingCycle = document.getElementById('billing-cycle');
 const paymentType = document.getElementById('payment-type');
@@ -10,9 +11,9 @@ const polygonHashInput = document.getElementById('polygon-hash');
 const copyPolygonBtn = document.getElementById('copy-polygon');
 const form = document.getElementById('quarterclub-form');
 
-const MASTER_CASH_CODE = "YOUR_SECRET_CODE"; // Replace with secret
+const MASTER_CASH_CODE = "YOUR_SECRET_CODE"; // Replace with your secret code
 
-/* -------- Price Display -------- */
+// ----------------- Price Display -----------------
 function updatePrice() {
     const selectedValue = tierSelect.value;
     const selectedText = tierSelect.options[tierSelect.selectedIndex].text;
@@ -42,18 +43,15 @@ function updatePrice() {
 
     priceDisplay.textContent = displayText;
 }
-tierSelect.addEventListener('change', updatePrice);
-billingCycle.addEventListener('change', updatePrice);
 
-/* -------- Copy Polygon Wallet -------- */
+// ----------------- Copy Polygon -----------------
 copyPolygonBtn.addEventListener('click', () => {
-    const wallet = document.getElementById('polygon-wallet');
-    wallet.select();
+    polygonWallet.select();
     document.execCommand('copy');
     alert('Polygon address copied!');
 });
 
-/* -------- Polygon Gas Fee -------- */
+// ----------------- Polygon Gas Fee -----------------
 async function updatePolygonGasFee() {
     const gasFeeEl = document.getElementById('polygon-gas-fee');
     try {
@@ -70,46 +68,28 @@ async function updatePolygonGasFee() {
 
         gasFeeEl.textContent = `Estimated Gas Fee: ${gasMatic.toFixed(6)} MATIC (~$${gasUsd.toFixed(2)} USD)`;
     } catch (err) {
-        console.error(err);
         gasFeeEl.textContent = "Estimated Gas Fee: Unavailable";
     }
 }
 
-/* Auto-update every 15s when Polygon is selected */
-setInterval(() => {
-    if(paymentType.value === 'polygon') updatePolygonGasFee();
-}, 15000);
-
-/* -------- Payment Type Toggle -------- */
-paymentType.addEventListener('change', () => {
-    paypalContainer.innerHTML = '';
-    polygonSection.style.display = cashSection.style.display = 'none';
-
-    if(paymentType.value === 'paypal' && tierSelect.value) renderPayPalButton(getFinalAmount());
-    if(paymentType.value === 'polygon') {
-        polygonSection.style.display = 'block';
-        updatePolygonGasFee();
-    }
-    if(paymentType.value === 'cash') cashSection.style.display = 'block';
-});
-
-/* -------- Final Amount -------- */
+// ----------------- Final Amount -----------------
 function getFinalAmount() {
     const basePrice = parseFloat(tierSelect.value);
     if(!basePrice) return null;
     let amount = basePrice;
+
     if(billingCycle.value === 'annual') amount *= 12;
     if(billingCycle.value === 'monthly' && amount < 5) {
         alert('Monthly payments are only available for $5 and above.');
         return null;
     }
-    return amount;
+    return amount.toFixed(2);
 }
 
-/* -------- PayPal Button -------- */
+// ----------------- Render PayPal Button -----------------
 function renderPayPalButton(amount) {
     if(!amount) return;
-    paypalContainer.innerHTML = "";
+    paypalContainer.innerHTML = '';
     paypal.Buttons({
         createOrder: (data, actions) => actions.order.create({
             purchase_units: [{ amount: { value: amount } }]
@@ -120,34 +100,46 @@ function renderPayPalButton(amount) {
     }).render('#paypal-button-container');
 }
 
-/* -------- Form Submission -------- */
+// ----------------- Payment Type Toggle -----------------
+function togglePaymentSections() {
+    paypalContainer.innerHTML = '';
+    polygonSection.style.display = cashSection.style.display = 'none';
+
+    if(paymentType.value === 'paypal') {
+        const amount = getFinalAmount();
+        if(amount) renderPayPalButton(amount);
+    }
+    if(paymentType.value === 'polygon') {
+        polygonSection.style.display = 'block';
+        updatePolygonGasFee();
+    }
+    if(paymentType.value === 'cash') {
+        cashSection.style.display = 'block';
+    }
+}
+
+// ----------------- Form Submission -----------------
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const finalAmount = getFinalAmount();
     if(finalAmount === null) return;
 
-    const payment = paymentType.value;
+    if(paymentType.value === 'cash' && cashCodeInput.value.trim() !== MASTER_CASH_CODE) {
+        return alert('Invalid cash code.');
+    }
 
-    if(payment === 'cash' && cashCodeInput.value.trim() !== MASTER_CASH_CODE) return alert('Invalid cash code.');
-    if(payment === 'polygon' && !polygonHashInput.value.trim()) return alert('Enter Polygon transaction hash.');
-    if(payment === 'paypal') return renderPayPalButton(finalAmount);
+    if(paymentType.value === 'polygon' && !polygonHashInput.value.trim()) {
+        return alert('Enter Polygon transaction hash.');
+    }
 
-    const businessData = {
-        name: document.getElementById('business-name').value,
-        ein: document.getElementById('business-ein').value,
-        email: document.getElementById('business-email').value,
-        phone: document.getElementById('business-phone').value,
-        address: document.getElementById('business-address').value,
-        city: document.getElementById('business-city').value,
-        state: document.getElementById('business-state').value,
-        zip: document.getElementById('business-zip').value,
-        tier: tierSelect.value,
-        billingCycle: billingCycle.value,
-        paymentType: payment,
-        cashCode: cashCodeInput.value.trim(),
-        polygonHash: polygonHashInput.value.trim()
-    };
+    if(paymentType.value === 'paypal') return; // Handled by PayPal SDK
 
+    // Collect form data and submit
+    const businessData = {};
+    form.querySelectorAll('input, select').forEach(el => {
+        businessData[el.id] = el.value;
+    });
+    
     try {
         const response = await fetch('https://api.braxendevelopment.work/', {
             method: 'POST',
@@ -155,9 +147,26 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify(businessData)
         });
         if(!response.ok) throw new Error('Network error');
-        alert(`Form submitted successfully for ${payment.toUpperCase()}.\nAmount: $${finalAmount.toFixed(2)}`);
+        alert(`Form submitted successfully for ${paymentType.value.toUpperCase()}.\nAmount: $${finalAmount}`);
     } catch(err) {
         console.error(err);
         alert('Error submitting data. Try again.');
     }
+});
+
+// ----------------- Event Listeners -----------------
+tierSelect.addEventListener('change', () => {
+    updatePrice();
+    if(paymentType.value === 'paypal') renderPayPalButton(getFinalAmount());
+});
+billingCycle.addEventListener('change', () => {
+    updatePrice();
+    if(paymentType.value === 'paypal') renderPayPalButton(getFinalAmount());
+});
+paymentType.addEventListener('change', togglePaymentSections);
+
+// ----------------- Initialize -----------------
+window.addEventListener('DOMContentLoaded', () => {
+    updatePrice();
+    togglePaymentSections(); // If page loads with PayPal selected
 });
