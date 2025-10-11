@@ -1,25 +1,84 @@
-/* Navigation styles */
-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;       /* Horizontal tabs */
-  gap: 30px;           /* Space between tabs */
-}
+<style>
+  /* Global Black & White Theme */
+  body {
+    background-color: #000;
+    color: #fff;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
 
-nav li {
-  display: inline-block;
-}
+  header, nav, footer {
+    background-color: #000;
+    color: #fff;
+    padding: 1rem 2rem;
+    text-align: center;
+  }
 
-nav a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 10px 15px;  /* Clickable area */
-  transition: background 0.3s;
-}
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
 
-nav a:hover {
-  background-color: #222;
-  border-radius: 5px;
-}
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  nav ul li a:hover {
+    color: #ccc;
+  }
+
+  form {
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+  }
+
+  label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+
+  input, select, button, textarea {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    background-color: #111;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #fff;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #ccc;
+  }
+
+  /* Always horizontal navbar on mobile too */
+  @media (max-width: 768px) {
+    nav ul {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+  }
+</style>
