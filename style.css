@@ -1,82 +1,60 @@
-/* Global Body Styles */
-body {
-  background-color: #000;
-  color: #fff;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+/* style.css - global dark theme */
+:root{
+  --bg:#000;
+  --panel:#111;
+  --muted:#888;
+  --accent:#0af;
+  --btn:#007bff;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:#fff;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-/* Links */
-a {
-  color: #fff;
-  text-decoration: none;
-}
+/* Header / Nav */
+header nav{background:var(--panel); border-bottom:1px solid #222; padding:12px 20px}
+nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0; align-items:center}
+nav a{color:#fff; text-decoration:none; font-weight:600}
+nav a.active{color:var(--accent)}
 
-a:hover {
-  text-decoration: underline;
-}
+/* Layout */
+.container{max-width:1000px; margin:24px auto; padding:20px}
+.card{background:var(--panel); padding:18px; border-radius:10px; box-shadow: 0 6px 20px rgba(0,0,0,0.6)}
+h1,h2,h3{color:#fff; margin:0 0 12px 0}
+p{color:#ddd; margin:0 0 12px 0}
+small{color:var(--muted)}
 
-/* Navigation Bar */
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-  margin: 0;
-  background-color: #111;
+/* Forms */
+select,input,textarea,button{
+  font-size:15px;
+  border-radius:8px;
+  border:1px solid #333;
+  background:#111;
+  color:#fff;
+  padding:10px 12px;
+  outline:none;
 }
+label{display:block; margin:10px 0 6px; color:#ddd}
+.form-row{display:flex; gap:10px; align-items:center}
+.form-row .flex-1{flex:1}
+button{cursor:pointer}
+.btn{background:var(--btn); color:#fff; border:none; padding:10px 14px; border-radius:8px}
+.btn-outline{background:transparent;border:1px solid #444;color:#fff;padding:9px 12px;border-radius:8px}
+.small{padding:6px 8px;font-size:14px}
 
-nav ul li {
-  display: inline;
-}
-
-/* Main Content */
-main {
-  padding: 20px;
-}
-
-/* Headings */
-h1, h2 {
-  color: #fff;
-}
-
-/* Paragraphs */
-p {
-  line-height: 1.6;
-}
-
-/* Forms (if present on other pages) */
-form input, form select, form button {
-  display: block;
-  margin: 10px 0;
-  padding: 10px;
-  width: 100%;
-  max-width: 400px;
-  background-color: #111;
-  color: #fff;
-  border: 1px solid #fff;
-}
-
-form button {
-  cursor: pointer;
-  border: none;
-  background-color: #222;
-}
-
-form button:hover {
-  background-color: #333;
-}
-
-/* Error messages */
-.error {
-  color: red;
-  display: none;
+/* Responsive */
+@media (max-width:720px){
+  .form-row{flex-direction:column}
+  nav ul{flex-wrap:wrap}
+  .container{padding:14px}
 }
 
 /* Footer */
-footer {
-  padding: 20px;
-  background-color: #111;
-  text-align: center;
-}
+footer{background:var(--panel); padding:14px 20px; text-align:center; border-top:1px solid #222; color:var(--muted)}
