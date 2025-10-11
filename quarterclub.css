@@ -82,3 +82,24 @@ form button:hover {
 #polygon-wallet {
     width: 100%;
 }
+
+/* ----------------- Terms & Conditions Page ----------------- */
+.terms-section {
+    margin: 40px 20px;
+}
+
+.terms-section h1,
+.terms-section h2 {
+    color: #fff;
+    margin-top: 20px;
+}
+
+.terms-section h1 {
+    margin-bottom: 20px;
+}
+
+.terms-section p {
+    color: #fff;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
