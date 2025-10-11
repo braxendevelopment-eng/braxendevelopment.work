@@ -33,6 +33,35 @@
 
   <section>
     <form id="quarterclub-form">
+  <label for="business-name">Business Name:</label>
+  <input type="text" id="business-name" placeholder="Business Name" required>
+
+  <label for="business-ein">EIN:</label>
+  <input type="text" id="business-ein" placeholder="XX-XXXXXXX" required>
+
+  <label for="business-email">Email:</label>
+  <input type="email" id="business-email" placeholder="Email" required>
+
+  <label for="business-phone">Phone Number:</label>
+  <input type="text" id="business-phone" placeholder="Phone Number" required>
+
+  <label for="business-address">Address:</label>
+  <input type="text" id="business-address" placeholder="Street Address" required>
+
+  <label for="business-city">City:</label>
+  <input type="text" id="business-city" placeholder="City" required>
+
+  <label for="business-state">State:</label>
+  <select id="business-state" required>
+    <option value="">Select State</option>
+    <option value="AL">Alabama</option>
+    <option value="AK">Alaska</option>
+    <!-- Add remaining states -->
+  </select>
+
+  <label for="business-zip">ZIP Code:</label>
+  <input type="text" id="business-zip" placeholder="ZIP Code" required>
+      
       <label for="tier-select">Select Tier:</label>
       <select id="tier-select" required>
         <option value="">Select a Tier</option>
@@ -130,6 +159,7 @@
 
       <label for="business-zip">ZIP Code:</label>
       <input type="text" id="business-zip" name="business-zip" required>
+      <button type="submit" id="submit-button">Submit & Pay</button>
     </form>
 </section>
 
@@ -171,6 +201,39 @@ paymentType.addEventListener('change', () => {
   if(type === 'cash') alert("You will receive a unique transaction code after purchase for verification.");
 });
 </script>
+const form = document.getElementById('quarterclub-form'); // Make sure your form has id="quarterclub-form"
 
+form.addEventListener('submit', (e) => {
+  e.preventDefault(); // Stops the page from reloading
+
+  // Collect all form data
+  const businessData = {
+    name: document.getElementById('business-name').value,
+    ein: document.getElementById('business-ein').value,
+    email: document.getElementById('business-email').value,
+    phone: document.getElementById('business-phone').value,
+    address: document.getElementById('business-address').value,
+    city: document.getElementById('business-city').value,
+    state: document.getElementById('business-state').value,
+    zip: document.getElementById('business-zip').value,
+    tier: tierSelect.value,
+    paymentType: paymentType.value
+  };
+
+  if (!businessData.tier || !businessData.paymentType) {
+    alert("Please select a tier and payment method.");
+    return;
+  }
+
+  if (businessData.paymentType === 'paypal') {
+    renderPayPalButton(businessData.tier);
+  } else if (businessData.paymentType === 'polygon') {
+    alert(`Send payment to your Polygon Wallet: ${POLYGON_WALLET_ADDRESS} and submit the transaction hash. Form data has been recorded.`);
+  } else if (businessData.paymentType === 'cash') {
+    alert("A unique transaction code will be generated and sent after payment. Form data has been recorded.");
+  }
+
+  // Optional: here you could POST the businessData to your Worker API
+});
 </body>
 </html>
