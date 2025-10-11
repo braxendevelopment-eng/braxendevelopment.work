@@ -114,23 +114,83 @@
   <input type="text" id="business-zip" required>
 
   <!-- Tier Selection -->
-      <label for="tier-select">Select Tier / Package:</label>
-      <select id="tier-select" required>
-        <option value="">Select a Tier / Package</option>
-        <option value="0.25">Founders’ Circle ($0.25/mo, billed $3/yr)</option>
-        <option value="1">Dollar Bill ($1/mo, billed $12/yr)</option>
-        <option value="2">Bread & Butter ($2/mo, billed $24/yr)</option>
-        <option value="5">Startup Lane ($5/mo)</option>
-        <option value="10">Builder’s Foundation ($10/mo)</option>
-        <option value="20">Growth Track ($20/mo)</option>
-        <option value="50">Pro Business ($50/mo)</option>
-        <option value="100">Executive Class ($100/mo)</option>
-        <option value="10_pdf">Path to Profit Handbook ($10 one-time)</option>
-      </select>
+<label for="tier-select" style="color: white;">Select Tier / Package:</label>
+<select id="tier-select" required>
+  <option value="">Select a Tier / Package</option>
+
+  <!-- Core Memberships -->
+  <option value="0.25">Founders’ Circle ($0.25/mo, billed $3/yr)</option>
+  <option value="2">Bread & Butter ($2/mo, billed $24/yr)</option>
+
+  <!-- Growth Tiers -->
+  <option value="5">Startup Lane ($5/mo or $60/yr)</option>
+  <option value="10">Builder’s Foundation ($10/mo or $120/yr)</option>
+  <option value="20">Growth Track ($20/mo or $240/yr)</option>
+  <option value="50">Pro Business ($50/mo or $600/yr)</option>
+  <option value="100">Executive Class ($100/mo or $1,200/yr)</option>
+
+  <!-- One-Time Offers -->
+  <option value="10_pdf">Path to Profit Handbook ($10 one-time)</option>
+</select>
+
+<!-- Billing Type -->
+<div style="margin-top: 10px;">
+  <label for="billing-type" style="color: white;">Billing Option:</label>
+  <select id="billing-type">
+    <option value="monthly">Monthly</option>
+    <option value="annual">Annual</option>
+  </select>
+</div>
+
+<!-- Displayed Price -->
+<p id="price-display" style="color: white; margin-top: 10px; font-weight: bold;">
+  Select a tier to view pricing.
+</p>
+
+<script>
+  const tierSelect = document.getElementById('tier-select');
+  const billingType = document.getElementById('billing-type');
+  const priceDisplay = document.getElementById('price-display');
+
+  function updatePrice() {
+    const selectedValue = tierSelect.value;
+    const selectedText = tierSelect.options[tierSelect.selectedIndex].text;
+    const billing = billingType.value;
+
+    if (!selectedValue) {
+      priceDisplay.textContent = 'Select a tier to view pricing.';
+      return;
+    }
+
+    if (selectedValue.includes('_pdf')) {
+      priceDisplay.textContent = 'Path to Profit Handbook — $10 one-time payment.';
+      return;
+    }
+
+    const basePrice = parseFloat(selectedValue);
+    let displayText = '';
+
+    // Restrict monthly billing for tiers $5 and up only
+    if (billing === 'monthly' && basePrice < 5) {
+      displayText = `${selectedText} — *Monthly billing not available for this tier.*`;
+    } else if (billing === 'annual') {
+      const annualPrice = (basePrice * 12).toFixed(2);
+      displayText = `${selectedText} — Annual Plan: $${annualPrice}/yr`;
+    } else {
+      displayText = `${selectedText} — Monthly Plan: $${basePrice}/mo`;
+    }
+
+    priceDisplay.textContent = displayText;
+  }
+
+  tierSelect.addEventListener('change', updatePrice);
+  billingType.addEventListener('change', updatePrice);
+</script>
   
 
   <label for="billing-cycle">Billing Cycle:</label>
   <select id="billing-cycle" required>
+    
     <option value="monthly">Monthly</option>
     <option value="annual">Annual</option>
   </select>
@@ -150,6 +210,8 @@
     <input type="text" value="0x3b8eB1C782F7f33525d34028B7E8fA50a214303f" readonly id="polygon-wallet">
     <button type="button" id="copy-polygon">Copy Address</button>
     <label for="polygon-hash">Enter Transaction Hash:</label>
+    <!-- Inside polygon section -->
+<p id="polygon-gas-fee">Estimated Gas Fee: Fetching...</p>
     <input type="text" id="polygon-hash" placeholder="Transaction Hash" required>
   </div>
 
