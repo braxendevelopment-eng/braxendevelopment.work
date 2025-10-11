@@ -213,19 +213,20 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const businessData = {
-    name: document.getElementById('business-name').value,
-    ein: document.getElementById('business-ein').value,
-    email: document.getElementById('business-email').value,
-    phone: document.getElementById('business-phone').value,
-    address: document.getElementById('business-address').value,
-    city: document.getElementById('business-city').value,
-    state: document.getElementById('business-state').value,
-    zip: document.getElementById('business-zip').value,
-    tier: tierSelect.value,
-    paymentType: paymentType.value,
-    cashCode: cashCodeInput.value.trim(),
-    polygonHash: document.getElementById('polygon-hash') ? document.getElementById('polygon-hash').value.trim() : ""
-  };
+  const businessData = {
+  name: document.getElementById('business-name').value,
+  ein: document.getElementById('business-ein').value,
+  email: document.getElementById('business-email').value,
+  phone: document.getElementById('business-phone').value,
+  address: document.getElementById('business-address').value,
+  city: document.getElementById('business-city').value,
+  state: document.getElementById('business-state').value,
+  zip: document.getElementById('business-zip').value,
+  tier: tierSelect.value,
+  paymentType: paymentType.value,
+  cashCode: cashCodeInput.value.trim(),
+  polygonHash: document.getElementById('polygon-hash').value.trim() // ✅ Fix here
+};
 if (tierSelect.value === '10_pdf') {
   businessData.package = "Path to Profit Handbook";
   businessData.tierAmount = 10; // Payment amount for this package
