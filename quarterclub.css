@@ -1,4 +1,4 @@
-/* Page Background & General Text */
+/* ----------------- General Styles ----------------- */
 body {
     background-color: #000;
     color: #fff;
@@ -30,12 +30,12 @@ section {
     margin: 20px;
 }
 
-/* ----------------- Form Styling ----------------- */
+/* ----------------- Form Styles ----------------- */
 form label {
     display: block;
     margin: 10px 0 5px;
     font-weight: bold;
-    color: #fff; /* Label text is white */
+    color: #fff; /* Labels are white */
 }
 
 form input, form select, form button {
@@ -47,8 +47,8 @@ form input, form select, form button {
     border-radius: 5px;
     border: 1px solid #555;
     box-sizing: border-box;
-    background-color: #000; /* Input boxes are black */
-    color: #fff; /* Typed text is white */
+    background-color: #000; /* Input boxes black */
+    color: #fff; /* Typed text white */
 }
 
 form input:focus, form select:focus {
@@ -70,8 +70,12 @@ form button:hover {
     color: #000;
 }
 
-/* Payment Sections */
-#paypal-button-container, #polygon-section, #cash-section {
+/* ----------------- Payment Sections ----------------- */
+#paypal-button-container {
+    margin-top: 20px;
+}
+
+#polygon-section, #cash-section {
     margin-top: 20px;
 }
 
