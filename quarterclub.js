@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('quarterclub-form');
     const tierSelect = document.getElementById('tier-select');
     const priceDisplay = document.getElementById('price-display');
-    const paymentTypeSelect = document.getElementById('payment-type');
 
     // ----------------- Pricing Display -----------------
     function updatePriceDisplay() {
@@ -15,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let amount;
         if (tierValue.includes('_pdf')) {
-            amount = 10; // One-time PDF
+            amount = 10;
             priceDisplay.textContent = `One-time purchase: $${amount.toFixed(2)}`;
         } else {
             amount = parseFloat(tierValue) * 12; // Always annual
@@ -24,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     tierSelect.addEventListener('change', updatePriceDisplay);
-    updatePriceDisplay(); // Initial
+    updatePriceDisplay(); // initial
 
     // ----------------- EIN Validation -----------------
     function isValidEIN(ein) {
@@ -41,26 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const paymentType = paymentTypeSelect.value;
+        const paymentType = document.getElementById('payment-type').value;
         if (!paymentType) {
             alert('Please select a payment method.');
             return;
         }
 
-        // ----------------- Payment Handling -----------------
-        switch (paymentType) {
-            case 'paypal':
-                // PayPal handles submission itself
-                if (window.paypalToggle) window.paypalToggle();
-                break;
-
-            case 'polygon':
-                if (window.polygonToggle) window.polygonToggle();
-                break;
-
-            case 'cash':
-                if (window.cashToggle) window.cashToggle();
-                break;
-        }
+        // Only dispatch for non-PayPal payments
+        if (paymentType === 'polygon' && window.polygonToggle) window.polygonToggle();
+        if (paymentType === 'cash' && window.cashToggle) window.cashToggle();
     });
 });
