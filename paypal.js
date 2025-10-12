@@ -1,71 +1,50 @@
-document.addEventListener('DOMContentLoaded', () => {
+// paypal.js
+window.paypalToggle = function() {
     const tierSelect = document.getElementById('tier-select');
-    const billingCycle = document.getElementById('billing-cycle');
-    const paymentType = document.getElementById('payment-type');
     const paypalContainer = document.getElementById('paypal-button-container');
-    const paypalIdInput = document.getElementById('paypal-id');
 
-    const planIds = {
-        '0.25': 'P-PLANID1',   // Founders’ Circle
-        '1': 'P-PLANID1B',     // Dollar Bill
-        '2': 'P-PLANID2',      // Bread & Butter
-        '5': 'P-PLANID3',      // Startup Lane
-        '10': 'P-PLANID4',     // Builder’s Foundation
-        '20': 'P-PLANID5',     // Growth Track
-        '50': 'P-PLANID6',     // Pro Business
-        '100': 'P-PLANID7'     // Executive Class
+    const tierValues = {
+        '0.25': 0.25,
+        '1': 1,
+        '2': 2,
+        '5': 5,
+        '10': 10,
+        '20': 20,
+        '50': 50,
+        '100': 100,
+        '10_pdf': 10
     };
 
+    function getPayPalAmount() {
+        const tier = tierSelect.value;
+        if (!tier) return null;
+        return tier === '10_pdf' ? 10.00 : tierValues[tier] * 12;
+    }
+
     function renderPayPalButton() {
-        // Only render if PayPal is selected
-        if(paymentType.value !== 'paypal') {
-            paypalContainer.innerHTML = '';
-            return;
-        }
-
-        paypalContainer.innerHTML = ''; // Clear previous buttons
-
-        // One-time PDF purchase
-        if(tierSelect.value.includes('_pdf')) {
-            paypal.Buttons({
-                createOrder: (data, actions) => actions.order.create({
-                    purchase_units: [{ amount: { value: '10.00' } }]
-                }),
-                onApprove: (data, actions) => actions.order.capture().then(() => {
-                    alert(`One-time purchase completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
-                    document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-                }),
-                onError: (err) => {
-                    console.error(err);
-                    alert('PayPal error occurred.');
-                }
-            }).render('#paypal-button-container');
-            return;
-        }
-
-        // Recurring subscription
-        const selectedPlanId = planIds[tierSelect.value];
-        if(!selectedPlanId) return;
+        paypalContainer.innerHTML = '';
+        const amount = getPayPalAmount();
+        if (!amount) return;
 
         paypal.Buttons({
-            createSubscription: (data, actions) => actions.subscription.create({ plan_id: selectedPlanId }),
-            onApprove: (data) => {
-                paypalIdInput.value = data.subscriptionID;
-                alert(`Subscription completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
-                document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+            createOrder: (data, actions) => {
+                return actions.order.create({
+                    purchase_units: [{ amount: { value: amount.toFixed(2) } }]
+                });
+            },
+            onApprove: (data, actions) => {
+                actions.order.capture().then(() => {
+                    alert(`Payment completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
+                    document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+                });
             },
             onError: (err) => {
                 console.error(err);
-                alert('PayPal subscription error.');
+                alert('PayPal payment error.');
             }
         }).render('#paypal-button-container');
     }
 
-    // Re-render on tier, billing, or payment type change
     tierSelect.addEventListener('change', renderPayPalButton);
-    billingCycle.addEventListener('change', renderPayPalButton);
-    paymentType.addEventListener('change', renderPayPalButton);
-
-    // Initial render
     renderPayPalButton();
-});
+};
