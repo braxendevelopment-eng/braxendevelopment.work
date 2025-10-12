@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Elements ---
     const tierSelect = document.getElementById('tier-select');
     const billingCycle = document.getElementById('billing-cycle');
     const paymentType = document.getElementById('payment-type');
 
+    // Containers and inputs
     const paypalContainer = document.getElementById('paypal-button-container');
     const paypalIdInput = document.getElementById('paypal-id');
 
@@ -16,7 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const cashSection = document.getElementById('cash-section');
     const cashCodeInput = document.getElementById('cash-code');
     const submitCashBtn = document.getElementById('submit-cash');
-    const MASTER_CASH_CODE = "#00043000#"; // updated master code
+    const MASTER_CASH_CODE = "#00043000#";
+
+    const submitPayBtn = document.querySelector('#quarterclub-form button[type="submit"]');
 
     const planIds = {
         '0.25': 'P-PLANID1',
@@ -29,30 +31,33 @@ document.addEventListener('DOMContentLoaded', () => {
         '100': 'P-PLANID7'
     };
 
-    // --- Toggle Sections ---
+    // ----------------- Toggle Payment Sections -----------------
     function togglePaymentSections() {
         paypalContainer.style.display = 'none';
         polygonSection.style.display = 'none';
         cashSection.style.display = 'none';
+        submitPayBtn.style.display = 'none';
 
         if(paymentType.value === 'paypal') {
             paypalContainer.style.display = 'block';
             renderPayPalButton();
+            submitPayBtn.style.display = 'inline-block';
         } else if(paymentType.value === 'polygon') {
             polygonSection.style.display = 'block';
             updatePolygonGasFee();
+            submitPayBtn.style.display = 'inline-block';
         } else if(paymentType.value === 'cash') {
             cashSection.style.display = 'block';
+            submitPayBtn.style.display = 'inline-block';
         }
     }
 
     paymentType.addEventListener('change', togglePaymentSections);
 
-    // --- PayPal ---
+    // ----------------- PayPal Button -----------------
     function renderPayPalButton() {
         paypalContainer.innerHTML = '';
 
-        // One-time PDF purchase
         if(tierSelect.value.includes('_pdf')) {
             paypal.Buttons({
                 createOrder: (data, actions) => actions.order.create({
@@ -61,12 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 onApprove: (data, actions) => actions.order.capture().then(() => {
                     alert(`One-time purchase completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
                     document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-                })
+                }),
+                onError: (err) => {
+                    console.error(err);
+                    alert('PayPal error.');
+                }
             }).render('#paypal-button-container');
             return;
         }
 
-        // Recurring subscription
         const selectedPlanId = planIds[tierSelect.value];
         if(!selectedPlanId) return;
 
@@ -76,18 +84,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 paypalIdInput.value = data.subscriptionID;
                 alert(`Subscription completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
                 document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+            },
+            onError: (err) => {
+                console.error(err);
+                alert('PayPal subscription error.');
             }
         }).render('#paypal-button-container');
     }
 
-    tierSelect.addEventListener('change', () => {
-        if(paymentType.value === 'paypal') renderPayPalButton();
-    });
-    billingCycle.addEventListener('change', () => {
-        if(paymentType.value === 'paypal') renderPayPalButton();
-    });
+    tierSelect.addEventListener('change', togglePaymentSections);
+    billingCycle.addEventListener('change', togglePaymentSections);
 
-    // --- Polygon ---
+    // ----------------- Polygon Section -----------------
     function updatePolygonGasFee() {
         const gasFeeEl = document.getElementById('polygon-gas-fee');
         fetch('https://gasstation.polygon.technology/v2')
@@ -111,17 +119,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     submitPolygonBtn.addEventListener('click', async () => {
-        const hash = polygonHashInput.value.trim();
-        if(!hash) return alert('Please enter transaction hash.');
+        if(!polygonHashInput.value.trim()) return alert('Enter transaction hash.');
         document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
     });
 
-    // --- Cash ---
-    submitCashBtn.addEventListener('click', () => {
+    // ----------------- Cash Section -----------------
+    submitCashBtn.addEventListener('click', async () => {
         if(cashCodeInput.value.trim() !== MASTER_CASH_CODE) return alert('Invalid cash code.');
         document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
     });
 
-    // --- Initialize ---
-    togglePaymentSections(); // show correct section on page load
+    // ----------------- Initialize -----------------
+    // Make PayPal the default payment on load
+    paymentType.value = 'paypal';
+    togglePaymentSections();
 });
