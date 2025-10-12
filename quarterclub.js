@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('quarterclub-form');
     const tierSelect = document.getElementById('tier-select');
     const priceDisplay = document.getElementById('price-display');
+    const paymentTypeSelect = document.getElementById('payment-type');
 
     // ----------------- Pricing Display -----------------
     function updatePriceDisplay() {
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             amount = 10; // One-time PDF
             priceDisplay.textContent = `One-time purchase: $${amount.toFixed(2)}`;
         } else {
-            amount = parseFloat(tierValue) * 12; // Always charge annual amount
+            amount = parseFloat(tierValue) * 12; // Always annual
             priceDisplay.textContent = `$${tierValue}/mo (billed $${amount.toFixed(2)})`;
         }
     }
@@ -40,20 +41,23 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const paymentType = document.getElementById('payment-type').value;
+        const paymentType = paymentTypeSelect.value;
         if (!paymentType) {
             alert('Please select a payment method.');
             return;
         }
 
-        // Dispatch to payment handler
-        switch(paymentType) {
+        // ----------------- Payment Handling -----------------
+        switch (paymentType) {
             case 'paypal':
+                // PayPal handles submission itself
                 if (window.paypalToggle) window.paypalToggle();
                 break;
+
             case 'polygon':
                 if (window.polygonToggle) window.polygonToggle();
                 break;
+
             case 'cash':
                 if (window.cashToggle) window.cashToggle();
                 break;
