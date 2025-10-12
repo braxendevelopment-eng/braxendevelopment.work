@@ -1,5 +1,6 @@
 // toggle.js
 document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const paymentTypeSelect = document.getElementById('payment-type');
 
     const paypalSection = document.getElementById('paypal-section');
@@ -7,12 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const cashSection = document.getElementById('cash-section');
 
     function toggleSections() {
-        // Hide all sections by default
         paypalSection.style.display = 'none';
         polygonSection.style.display = 'none';
         cashSection.style.display = 'none';
 
-        // Show only the selected payment section
         switch (paymentTypeSelect.value) {
             case 'paypal':
                 paypalSection.style.display = 'block';
@@ -26,14 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 cashSection.style.display = 'block';
                 if (window.cashToggle) window.cashToggle();
                 break;
-            default:
-                break;
         }
     }
 
-    // Initialize on page load
     toggleSections();
-
-    // Re-toggle whenever the payment type changes
     paymentTypeSelect.addEventListener('change', toggleSections);
 });
