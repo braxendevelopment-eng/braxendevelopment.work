@@ -6,22 +6,21 @@ window.paypalToggle = function() {
     const paypalIdInput = document.getElementById('paypal-id');
 
     const planIds = {
-        '0.25': 'P-PLANID1',
-        '1': 'P-PLANID1B',
-        '2': 'P-PLANID2',
-        '5': 'P-PLANID3',
-        '10': 'P-PLANID4',
-        '20': 'P-PLANID5',
-        '50': 'P-PLANID6',
-        '100': 'P-PLANID7'
+        '0.25': 'P-PLANID1',   // Founders’ Circle
+        '1': 'P-PLANID1B',     // Dollar Bill
+        '2': 'P-PLANID2',      // Bread & Butter
+        '5': 'P-PLANID3',      // Startup Lane
+        '10': 'P-PLANID4',     // Builder’s Foundation
+        '20': 'P-PLANID5',     // Growth Track
+        '50': 'P-PLANID6',     // Pro Business
+        '100': 'P-PLANID7'     // Executive Class
     };
 
     function renderPayPalButton() {
-        if (paypalContainer.style.display === 'none') return; // don't render if hidden
-        paypalContainer.innerHTML = ''; // clear previous buttons
+        paypalContainer.innerHTML = '';
 
         // One-time PDF purchase
-        if (tierSelect.value.includes('_pdf')) {
+        if(tierSelect.value.includes('_pdf')) {
             paypal.Buttons({
                 createOrder: (data, actions) => actions.order.create({
                     purchase_units: [{ amount: { value: '10.00' } }]
@@ -40,7 +39,7 @@ window.paypalToggle = function() {
 
         // Recurring subscription
         const selectedPlanId = planIds[tierSelect.value];
-        if (!selectedPlanId) return;
+        if(!selectedPlanId) return;
 
         paypal.Buttons({
             createSubscription: (data, actions) => actions.subscription.create({ plan_id: selectedPlanId }),
@@ -56,10 +55,10 @@ window.paypalToggle = function() {
         }).render('#paypal-button-container');
     }
 
+    // Initial render
+    renderPayPalButton();
+
     // Re-render on tier or billing change
     tierSelect.addEventListener('change', renderPayPalButton);
     billingCycle.addEventListener('change', renderPayPalButton);
-
-    // Initial render
-    renderPayPalButton();
 };
