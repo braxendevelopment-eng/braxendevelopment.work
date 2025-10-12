@@ -5,24 +5,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const polygonSection = document.getElementById('polygon-section');
     const cashSection = document.getElementById('cash-section');
 
-    // Set PayPal as default
+    // Default: PayPal selected
     paymentType.value = 'paypal';
 
     function togglePaymentSections() {
-        // Hide all sections first
         paypalSection.style.display = 'none';
         polygonSection.style.display = 'none';
         cashSection.style.display = 'none';
 
-        // Show selected
-        if(paymentType.value === 'paypal') paypalSection.style.display = 'block';
-        if(paymentType.value === 'polygon') polygonSection.style.display = 'block';
-        if(paymentType.value === 'cash') cashSection.style.display = 'block';
+        if (paymentType.value === 'paypal') paypalSection.style.display = 'block';
+        if (paymentType.value === 'polygon') polygonSection.style.display = 'block';
+        if (paymentType.value === 'cash') cashSection.style.display = 'block';
     }
 
-    // Listen for changes
     paymentType.addEventListener('change', togglePaymentSections);
 
-    // Initialize on page load
+    // Show default section on load
     togglePaymentSections();
 });
