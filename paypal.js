@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tierSelect = document.getElementById('tier-select');
+    const billingCycle = document.getElementById('billing-cycle');
+    const paymentType = document.getElementById('payment-type');
     const paypalContainer = document.getElementById('paypal-button-container');
     const paypalIdInput = document.getElementById('paypal-id');
 
@@ -14,9 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         '100': 'P-PLANID7'
     };
 
-    window.renderPayPalButton = function() {
-        if(document.getElementById('payment-type').value !== 'paypal') return;
-
+    function renderPayPalButton() {
+        if(paymentType.value !== 'paypal') return;
         paypalContainer.innerHTML = '';
 
         // One-time PDF purchase
@@ -28,8 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 onApprove: (data, actions) => actions.order.capture().then(() => {
                     alert(`One-time purchase completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
                     document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-                }),
-                onError: (err) => console.error(err)
+                })
             }).render('#paypal-button-container');
             return;
         }
@@ -44,11 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 paypalIdInput.value = data.subscriptionID;
                 alert(`Subscription completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
                 document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-            },
-            onError: (err) => console.error(err)
+            }
         }).render('#paypal-button-container');
-    };
+    }
 
     tierSelect.addEventListener('change', renderPayPalButton);
-    document.getElementById('billing-cycle').addEventListener('change', renderPayPalButton);
+    billingCycle.addEventListener('change', renderPayPalButton);
+    paymentType.addEventListener('change', renderPayPalButton);
+
+    // Initial render
+    if(paymentType.value === 'paypal') renderPayPalButton();
 });
