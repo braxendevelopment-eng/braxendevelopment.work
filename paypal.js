@@ -2,23 +2,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const tierSelect = document.getElementById('tier-select');
     const billingCycle = document.getElementById('billing-cycle');
     const paymentType = document.getElementById('payment-type');
+
     const paypalContainer = document.getElementById('paypal-button-container');
     const paypalIdInput = document.getElementById('paypal-id');
 
     const planIds = {
-        '0.25': 'P-PLANID1',
-        '1': 'P-PLANID1B',
-        '2': 'P-PLANID2',
-        '5': 'P-PLANID3',
-        '10': 'P-PLANID4',
-        '20': 'P-PLANID5',
-        '50': 'P-PLANID6',
-        '100': 'P-PLANID7'
+        '0.25': 'P-PLANID1',   // Founders’ Circle
+        '1': 'P-PLANID1B',     // Dollar Bill
+        '2': 'P-PLANID2',      // Bread & Butter
+        '5': 'P-PLANID3',      // Startup Lane
+        '10': 'P-PLANID4',     // Builder’s Foundation
+        '20': 'P-PLANID5',     // Growth Track
+        '50': 'P-PLANID6',     // Pro Business
+        '100': 'P-PLANID7'     // Executive Class
     };
 
     function renderPayPalButton() {
-        if(paymentType.value !== 'paypal') return;
-        paypalContainer.innerHTML = '';
+        // Only render if PayPal is selected
+        if(paymentType.value !== 'paypal') {
+            paypalContainer.innerHTML = '';
+            return;
+        }
+
+        paypalContainer.innerHTML = ''; // Clear previous buttons
 
         // One-time PDF purchase
         if(tierSelect.value.includes('_pdf')) {
@@ -29,7 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 onApprove: (data, actions) => actions.order.capture().then(() => {
                     alert(`One-time purchase completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
                     document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-                })
+                }),
+                onError: (err) => {
+                    console.error(err);
+                    alert('PayPal error occurred.');
+                }
             }).render('#paypal-button-container');
             return;
         }
@@ -44,14 +54,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 paypalIdInput.value = data.subscriptionID;
                 alert(`Subscription completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
                 document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+            },
+            onError: (err) => {
+                console.error(err);
+                alert('PayPal subscription error.');
             }
         }).render('#paypal-button-container');
     }
 
+    // Re-render on tier, billing, or payment type change
     tierSelect.addEventListener('change', renderPayPalButton);
     billingCycle.addEventListener('change', renderPayPalButton);
     paymentType.addEventListener('change', renderPayPalButton);
 
     // Initial render
-    if(paymentType.value === 'paypal') renderPayPalButton();
+    renderPayPalButton();
 });
