@@ -1,35 +1,20 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const paymentTypeSelect = document.getElementById('payment-type');
+paymentTypeSelect.addEventListener('change', () => {
+    paypalSection.style.display = 'none';
+    polygonSection.style.display = 'none';
+    cashSection.style.display = 'none';
 
-    // Function to hide all payment sections
-    function hideAllSections() {
-        const sections = document.querySelectorAll('#paypal-button-container, #polygon-section, #cash-section');
-        sections.forEach(section => section.style.display = 'none');
+    switch (paymentTypeSelect.value) {
+        case 'paypal':
+            paypalSection.style.display = 'block';
+            if (window.paypalToggle) window.paypalToggle(); // calls paypal-toggle.js
+            break;
+        case 'polygon':
+            polygonSection.style.display = 'block';
+            if (window.polygonToggle) window.polygonToggle(); // calls polygon-toggle.js
+            break;
+        case 'cash':
+            cashSection.style.display = 'block';
+            if (window.cashToggle) window.cashToggle(); // calls cash-toggle.js
+            break;
     }
-
-    // Function to show the section for the selected payment type
-    function showSection(paymentType) {
-        hideAllSections(); // hide everything first
-        switch (paymentType) {
-            case 'paypal':
-                document.getElementById('paypal-button-container').style.display = 'block';
-                if (window.renderPayPalButton) window.renderPayPalButton(); // call PayPal rendering
-                break;
-            case 'polygon':
-                document.getElementById('polygon-section').style.display = 'block';
-                if (window.updatePolygonGasFee) window.updatePolygonGasFee(); // call Polygon update
-                break;
-            case 'cash':
-                document.getElementById('cash-section').style.display = 'block';
-                break;
-        }
-    }
-
-    // Initial toggle on page load
-    showSection(paymentTypeSelect.value);
-
-    // Listen for changes on the payment type select
-    paymentTypeSelect.addEventListener('change', (e) => {
-        showSection(e.target.value);
-    });
 });
