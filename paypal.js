@@ -1,34 +1,32 @@
-document.addEventListener('DOMContentLoaded', () => {
+// paypal-toggle.js
+window.paypalToggle = function() {
     const tierSelect = document.getElementById('tier-select');
-    const priceDisplay = document.getElementById('price-display');
+    const paypalContainer = document.getElementById('paypal-button-container');
 
-    const tierValues = {
-        '0.25': 0.25,
-        '1': 1,
-        '2': 2,
-        '5': 5,
-        '10': 10,
-        '20': 20,
-        '50': 50,
-        '100': 100,
+    const amounts = {
+        '0.25': 3,
+        '1': 12,
+        '2': 24,
+        '5': 60,
+        '10': 120,
+        '20': 240,
+        '50': 600,
+        '100': 1200,
         '10_pdf': 10
     };
 
-    function updatePriceDisplay() {
-        const tier = tierSelect.value;
-        if (!tier) {
-            priceDisplay.textContent = "Select a tier to view pricing.";
-            return;
-        }
+    paypalContainer.innerHTML = '';
+    const amount = amounts[tierSelect.value];
+    if (!amount) return;
 
-        if(tier === '10_pdf') {
-            priceDisplay.textContent = `One-time purchase: $10.00`;
-        } else {
-            const annualAmount = tierValues[tier] * 12;
-            priceDisplay.textContent = `$${tierValues[tier]}/mo (billed $${annualAmount})`;
-        }
-    }
-
-    tierSelect.addEventListener('change', updatePriceDisplay);
-    updatePriceDisplay(); // Initial display
-});
+    paypal.Buttons({
+        createOrder: (data, actions) => actions.order.create({
+            purchase_units: [{ amount: { value: amount.toFixed(2) } }]
+        }),
+        onApprove: (data, actions) => actions.order.capture().then(() => {
+            alert(`Payment completed: $${amount.toFixed(2)}`);
+            document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+        }),
+        onError: (err) => { console.error(err); alert('PayPal error occurred.'); }
+    }).render('#paypal-button-container');
+};
