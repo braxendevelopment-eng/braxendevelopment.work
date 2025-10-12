@@ -10,25 +10,34 @@ document.addEventListener('DOMContentLoaded', () => {
         polygonSection.style.display = 'none';
         cashSection.style.display = 'none';
 
-        // Show the selected section
+        // Show the selected section and activate relevant functionality
         switch (paymentTypeSelect.value) {
             case 'paypal':
                 paypalSection.style.display = 'block';
+                // Trigger PayPal button render if function exists
+                if (typeof renderPayPalButton === 'function') {
+                    renderPayPalButton();
+                }
                 break;
             case 'polygon':
                 polygonSection.style.display = 'block';
+                // Trigger gas fee update if function exists
+                if (typeof updatePolygonGasFee === 'function') {
+                    updatePolygonGasFee();
+                }
                 break;
             case 'cash':
                 cashSection.style.display = 'block';
+                // Nothing extra needed for cash
                 break;
             default:
                 break;
         }
     }
 
-    // Initialize the display based on the current selection
+    // Initialize display based on the current selection
     togglePaymentSections();
 
-    // Add event listener to update display when payment type changes
+    // Update display whenever the payment type changes
     paymentTypeSelect.addEventListener('change', togglePaymentSections);
 });
