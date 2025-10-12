@@ -136,12 +136,23 @@
         <div id="paypal-button-container"></div>
 
         <div id="polygon-section" style="display:none;">
-          <p>Send payment to this Polygon Wallet:</p>
-          <input type="text" value="0x3b8eB1C782F7f33525d34028B7E8fA50a214303f" readonly id="polygon-wallet">
-          <button type="button" id="copy-polygon">Copy Address</button>
-          <label for="polygon-hash">Enter Transaction Hash:</label>
-          <input type="text" id="polygon-hash" placeholder="Transaction Hash" required>
-          <p id="polygon-gas-fee">Estimated Gas Fee: Fetching...</p>
+  <p>Send payment to this Polygon Wallet:</p>
+
+  <input type="text" 
+         value="0x3b8eB1C782F7f33525d34028B7E8fA50a214303f" 
+         readonly 
+         id="polygon-wallet">
+
+  <button type="button" id="copy-polygon">Copy Address</button>
+
+  <label for="polygon-hash">Enter Transaction Hash:</label>
+  <input type="text" id="polygon-hash" placeholder="Transaction Hash" required>
+
+  <p id="polygon-gas-fee">Estimated Gas Fee: Fetching...</p>
+
+  <button type="button" id="submit-polygon" style="margin-top:10px;">
+    Submit Polygon Payment
+  </button>
         </div>
 
         <div id="cash-section" style="display:none;">
