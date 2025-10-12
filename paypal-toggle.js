@@ -14,30 +14,19 @@ window.paypalToggle = function() {
         '10_pdf': 10
     };
 
-    function renderButton() {
-        paypalContainer.innerHTML = ''; // Clear previous
-        const amount = amounts[tierSelect.value];
-        if (!amount) return;
+    paypalContainer.innerHTML = '';
+    const amount = amounts[tierSelect.value];
+    if (!amount) return;
 
-        paypal.Buttons({
-            createOrder: (data, actions) => actions.order.create({
-                purchase_units: [{ amount: { value: amount.toFixed(2) } }]
-            }),
-            onApprove: (data, actions) => actions.order.capture().then(() => {
-                alert(`Payment completed: $${amount.toFixed(2)}`);
-                // Auto-submit form after PayPal success
-                document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-            }),
-            onError: (err) => {
-                console.error(err);
-                alert('PayPal payment error.');
-            }
-        }).render('#paypal-button-container');
-    }
-
-    // Only render if container is visible
-    if (paypalContainer.offsetParent !== null) renderButton();
-
-    // Update button if tier changes
-    tierSelect.addEventListener('change', renderButton);
+    paypal.Buttons({
+        createOrder: (data, actions) => actions.order.create({
+            purchase_units: [{ amount: { value: amount.toFixed(2) } }]
+        }),
+        onApprove: (data, actions) => actions.order.capture().then(() => {
+            alert(`Payment completed: $${amount.toFixed(2)}`);
+            // auto-submit form after PayPal completes
+            document.getElementById('quarterclub-form').submit();
+        }),
+        onError: (err) => { console.error(err); alert('PayPal error occurred.'); }
+    }).render('#paypal-button-container');
 };
