@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const polygonSection = document.getElementById('polygon-section');
     const polygonWallet = document.getElementById('polygon-wallet');
     const polygonHashInput = document.getElementById('polygon-hash');
     const copyPolygonBtn = document.getElementById('copy-polygon');
@@ -27,11 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     submitPolygonBtn.addEventListener('click', async () => {
-        if(!polygonHashInput.value.trim()) return alert('Enter transaction hash.');
-
-        const formEvent = new Event('submit');
-        document.getElementById('quarterclub-form').dispatchEvent(formEvent);
+        if(!polygonHashInput.value) return alert('Please enter a transaction hash.');
+        document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
     });
 
-    updatePolygonGasFee();
+    // Show section if selected
+    if(document.getElementById('payment-type').value === 'polygon') {
+        polygonSection.style.display = 'block';
+        updatePolygonGasFee();
+    }
 });
