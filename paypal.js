@@ -1,5 +1,8 @@
 // paypal-toggle.js
-window.paypalToggle = function() {
+window.paypalToggle = (function () {
+    let rendered = false;
+    let currentTier = null;
+
     const tierSelect = document.getElementById('tier-select');
     const paypalContainer = document.getElementById('paypal-button-container');
 
@@ -15,18 +18,37 @@ window.paypalToggle = function() {
         '10_pdf': 10
     };
 
-    paypalContainer.innerHTML = '';
-    const amount = amounts[tierSelect.value];
-    if (!amount) return;
+    function renderButton() {
+        const tier = tierSelect.value;
+        if (!tier || tier === currentTier) return; // Skip if no change
 
-    paypal.Buttons({
-        createOrder: (data, actions) => actions.order.create({
-            purchase_units: [{ amount: { value: amount.toFixed(2) } }]
-        }),
-        onApprove: (data, actions) => actions.order.capture().then(() => {
-            alert(`Payment completed: $${amount.toFixed(2)}`);
-            document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-        }),
-        onError: (err) => { console.error(err); alert('PayPal error occurred.'); }
-    }).render('#paypal-button-container');
-};
+        currentTier = tier;
+        const amount = amounts[tier];
+        if (!amount) return;
+
+        // Clear existing buttons
+        paypalContainer.innerHTML = '';
+
+        paypal.Buttons({
+            createOrder: (data, actions) => actions.order.create({
+                purchase_units: [{ amount: { value: amount.toFixed(2) } }]
+            }),
+            onApprove: (data, actions) => actions.order.capture().then(() => {
+                alert(`Payment completed: $${amount.toFixed(2)}`);
+                // Auto-submit the form after PayPal success
+                document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+            }),
+            onError: (err) => {
+                console.error(err);
+                alert('PayPal error occurred.');
+            }
+        }).render('#paypal-button-container');
+
+        rendered = true;
+    }
+
+    // Re-render button whenever tier changes
+    tierSelect.addEventListener('change', renderButton);
+
+    return renderButton;
+})();
