@@ -7,31 +7,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const cashSection = document.getElementById('cash-section');
 
     function toggleSections() {
-        // Hide all sections first
+        // Hide all sections
         paypalSection.style.display = 'none';
         polygonSection.style.display = 'none';
         cashSection.style.display = 'none';
 
-        // Show only the selected section
+        // Show the selected section
         switch(paymentTypeSelect.value) {
             case 'paypal':
                 paypalSection.style.display = 'block';
-                if(typeof window.paypalToggle === 'function') window.paypalToggle();
+                if (window.paypalToggle) window.paypalToggle();
                 break;
             case 'polygon':
                 polygonSection.style.display = 'block';
-                if(typeof window.polygonToggle === 'function') window.polygonToggle();
+                if (window.polygonToggle) window.polygonToggle();
                 break;
             case 'cash':
                 cashSection.style.display = 'block';
-                if(typeof window.cashToggle === 'function') window.cashToggle();
+                if (window.cashToggle) window.cashToggle();
+                break;
+            default:
                 break;
         }
     }
 
-    // Initialize display
+    // Initialize display on page load
     toggleSections();
 
-    // Update display when payment method changes
+    // Re-toggle whenever user changes payment type
     paymentTypeSelect.addEventListener('change', toggleSections);
 });
