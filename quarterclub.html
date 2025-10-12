@@ -21,7 +21,7 @@
   <main>
     <section>
       <h1>Welcome to the Quarter Club</h1>
-      <p>Select your tier and payment method. Annual payments multiply your selected tier by 12. Monthly payments only available for $5 and above.</p>
+      <p>Select your tier and payment method. All payments are one-time based on the tier selected.</p>
     </section>
 
     <section>
@@ -47,6 +47,7 @@
         <label for="business-state">State:</label>
         <select id="business-state" required>
           <option value="">Select State</option>
+          <!-- State options... -->
           <option value="AL">Alabama</option>
           <option value="AK">Alaska</option>
           <option value="AZ">Arizona</option>
@@ -104,82 +105,71 @@
         <input type="text" id="business-zip" required>
 
         <label for="tier-select">Select Tier / Package:</label>
-<select id="tier-select" required>
-  <option value="">Select a Tier / Package</option>
-  <option value="0.25">Founders’ Circle ($0.25/mo, billed $3/yr)</option>
-  <option value="1">Dollar Bill ($1/mo or $12/yr)</option>
-  <option value="2">Bread & Butter ($2/mo, billed $24/yr)</option>
-  <option value="5">Startup Lane ($5/mo or $60/yr)</option>
-  <option value="10">Builder’s Foundation ($10/mo or $120/yr)</option>
-  <option value="20">Growth Track ($20/mo or $240/yr)</option>
-  <option value="50">Pro Business ($50/mo or $600/yr)</option>
-  <option value="100">Executive Class ($100/mo or $1,200/yr)</option>
-  <option value="10_pdf">Path to Profit Handbook ($10 one-time)</option>
-</select>
-
-        <label for="billing-cycle">Billing Cycle:</label>
-        <select id="billing-cycle" required>
-          <option value="monthly">Monthly</option>
-          <option value="annual">Annual</option>
+        <select id="tier-select" required>
+          <option value="">Select a Tier / Package</option>
+          <option value="0.25">Founders’ Circle ($0.25/mo, billed $3)</option>
+          <option value="1">Dollar Bill ($1/mo, billed $12)</option>
+          <option value="2">Bread & Butter ($2/mo, billed $24)</option>
+          <option value="5">Startup Lane ($5/mo, billed $60)</option>
+          <option value="10">Builder’s Foundation ($10/mo, billed $120)</option>
+          <option value="20">Growth Track ($20/mo, billed $240)</option>
+          <option value="50">Pro Business ($50/mo, billed $600)</option>
+          <option value="100">Executive Class ($100/mo, billed $1200)</option>
+          <option value="10_pdf">Path to Profit Handbook ($10 one-time)</option>
         </select>
 
+        <p id="price-display" style="font-weight:bold; margin:5px 0;"></p>
+
         <!-- Payment Method Selector -->
-<label for="payment-type">Payment Method:</label>
-<select id="payment-type" required>
-  <option value="paypal">PayPal</option>
-  <option value="polygon">Polygon (USDC)</option>
-  <option value="cash">Cash</option>
-</select>
+        <label for="payment-type">Payment Method:</label>
+        <select id="payment-type" required>
+          <option value="paypal">PayPal</option>
+          <option value="polygon">Polygon (USDC)</option>
+          <option value="cash">Cash</option>
+        </select>
 
-<!-- PayPal Section -->
-<div id="paypal-button-container" style="display:none;"></div>
-<input type="hidden" id="paypal-id" />
+        <!-- PayPal Section -->
+        <div id="paypal-button-container" style="display:none;"></div>
+        <input type="hidden" id="paypal-id" />
 
-<!-- Polygon Section -->
-<div id="polygon-section" style="display:none;">
-  <p>Send payment to this Polygon Wallet:</p>
-  <input type="text" 
-         value="0x3b8eB1C782F7f33525d34028B7E8fA50a214303f" 
-         readonly 
-         id="polygon-wallet">
+        <!-- Polygon Section -->
+        <div id="polygon-section" style="display:none;">
+          <p>Send payment to this Polygon Wallet:</p>
+          <input type="text" value="0x3b8eB1C782F7f33525d34028B7E8fA50a214303f" readonly id="polygon-wallet">
+          <button type="button" id="copy-polygon">Copy Address</button>
+          <label for="polygon-hash">Enter Transaction Hash:</label>
+          <input type="text" id="polygon-hash" placeholder="Transaction Hash" required>
+          <p id="polygon-gas-fee">Estimated Gas Fee: Fetching...</p>
+          <button type="button" id="polygon-submit" style="margin-top:10px;">Submit Polygon Payment</button>
+          <p id="polygon-status"></p>
+        </div>
 
-  <button type="button" id="copy-polygon">Copy Address</button>
+        <!-- Cash Section -->
+        <div id="cash-section" style="display:none;">
+          <label for="cash-code">Enter Cash Code:</label>
+          <input type="text" id="cash-code" placeholder="Your Cash Code" required>
+          <button type="button" id="cash-submit" style="margin-top:10px;">Submit Cash Payment</button>
+          <p id="cash-status"></p>
+        </div>
 
-  <label for="polygon-hash">Enter Transaction Hash:</label>
-  <input type="text" id="polygon-hash" placeholder="Transaction Hash" required>
-
-  <p id="polygon-gas-fee">Estimated Gas Fee: Fetching...</p>
-
-  <button type="button" id="polygon-submit" style="margin-top:10px;">Submit Polygon Payment</button>
-  <p id="polygon-status"></p>
-</div>
-
-<!-- Cash Section -->
-<div id="cash-section" style="display:none;">
-  <label for="cash-code">Enter Cash Code:</label>
-  <input type="text" id="cash-code" placeholder="Your Cash Code" required>
-  
-  <button type="button" id="cash-submit" style="margin-top:10px;">Submit Cash Payment</button>
-  <p id="cash-status"></p>
-</div>
-
-        
-        
-
+        <button type="submit" style="margin-top:10px;">Submit & Pay</button>
       </form>
     </section>
-  
   </main>
 
   <footer style="text-align:center; margin:20px; color:#888;">
     &copy; 2025 Braxen Development. All rights reserved.
   </footer>
-<!-- PayPal SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id=AdefJjr7m6mZkDwKqt_nyTiOSRCXIThl2h41bgHzev27XWXZFLyGhXF7i8RIfM1ZDucgNVzkdb-w5bnd&vault=true&intent=subscription"></script>
 
-<!-- Core scripts -->
-<script src="quarterclub.js"></script>
-<script src="toggle.js"></script>
-<script src="polygon.js"></script>
-<script src="cash.js"></script>
-<script src="submission.js"></script>
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AdefJjr7m6mZkDwKqt_nyTiOSRCXIThl2h41bgHzev27XWXZFLyGhXF7i8RIfM1ZDucgNVzkdb-w5bnd&intent=capture"></script>
+
+  <!-- Core scripts -->
+  <script src="quarterclub.js"></script>
+  <script src="toggle.js"></script>
+  <script src="paypal-toggle.js"></script>
+  <script src="polygon.js"></script>
+  <script src="cash.js"></script>
+  <script src="submission.js"></script>
+</body>
+            </html>
