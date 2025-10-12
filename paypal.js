@@ -1,7 +1,6 @@
-// paypal.js
-window.paypalToggle = function() {
+document.addEventListener('DOMContentLoaded', () => {
     const tierSelect = document.getElementById('tier-select');
-    const paypalContainer = document.getElementById('paypal-button-container');
+    const priceDisplay = document.getElementById('price-display');
 
     const tierValues = {
         '0.25': 0.25,
@@ -15,36 +14,21 @@ window.paypalToggle = function() {
         '10_pdf': 10
     };
 
-    function getPayPalAmount() {
+    function updatePriceDisplay() {
         const tier = tierSelect.value;
-        if (!tier) return null;
-        return tier === '10_pdf' ? 10.00 : tierValues[tier] * 12;
+        if (!tier) {
+            priceDisplay.textContent = "Select a tier to view pricing.";
+            return;
+        }
+
+        if(tier === '10_pdf') {
+            priceDisplay.textContent = `One-time purchase: $10.00`;
+        } else {
+            const annualAmount = tierValues[tier] * 12;
+            priceDisplay.textContent = `$${tierValues[tier]}/mo (billed $${annualAmount})`;
+        }
     }
 
-    function renderPayPalButton() {
-        paypalContainer.innerHTML = '';
-        const amount = getPayPalAmount();
-        if (!amount) return;
-
-        paypal.Buttons({
-            createOrder: (data, actions) => {
-                return actions.order.create({
-                    purchase_units: [{ amount: { value: amount.toFixed(2) } }]
-                });
-            },
-            onApprove: (data, actions) => {
-                actions.order.capture().then(() => {
-                    alert(`Payment completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
-                    document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-                });
-            },
-            onError: (err) => {
-                console.error(err);
-                alert('PayPal payment error.');
-            }
-        }).render('#paypal-button-container');
-    }
-
-    tierSelect.addEventListener('change', renderPayPalButton);
-    renderPayPalButton();
-};
+    tierSelect.addEventListener('change', updatePriceDisplay);
+    updatePriceDisplay(); // Initial display
+});
