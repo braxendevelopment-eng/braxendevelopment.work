@@ -123,24 +123,21 @@
           <option value="annual">Annual</option>
         </select>
 
-        <p id="price-display">Select a tier to view pricing.</p>
+        <!-- Payment Method Selector -->
+<label for="payment-type">Payment Method:</label>
+<select id="payment-type" required>
+  <option value="paypal">PayPal</option>
+  <option value="polygon">Polygon (USDC)</option>
+  <option value="cash">Cash</option>
+</select>
 
-        <label for="payment-type">Payment Method:</label>
-        <select id="payment-type" required>
-          <option value="">Select Payment Method</option>
-          <option value="paypal">PayPal</option>
-          <option value="polygon">Polygon (USDC)</option>
-          <option value="cash">Cash</option>
-        </select>
+<!-- PayPal Section -->
+<div id="paypal-button-container" style="display:none;"></div>
+<input type="hidden" id="paypal-id" />
 
-        <!-- PayPal Section -->
-<div id="paypal-section">
-    <div id="paypal-button-container"></div>
-    <input type="hidden" id="paypal-id" />
-</div>
-        <div id="polygon-section" style="display:none;">
+<!-- Polygon Section -->
+<div id="polygon-section" style="display:none;">
   <p>Send payment to this Polygon Wallet:</p>
-
   <input type="text" 
          value="0x3b8eB1C782F7f33525d34028B7E8fA50a214303f" 
          readonly 
@@ -153,15 +150,17 @@
 
   <p id="polygon-gas-fee">Estimated Gas Fee: Fetching...</p>
 
-  <button type="button" id="submit-polygon" style="margin-top:10px;">
-    Submit Polygon Payment
-  </button>
-        </div>
+  <button type="button" id="polygon-submit" style="margin-top:10px;">Submit Polygon Payment</button>
+  <p id="polygon-status"></p>
+</div>
 
-        <div id="cash-section" style="display:none;">
-    <label for="cash-code">Enter Cash Code:</label>
-    <input type="text" id="cash-code" placeholder="Your Cash Code" required>
-    <button type="button" id="submit-cash" style="margin-top:10px;">Submit Cash Payment</button>
+<!-- Cash Section -->
+<div id="cash-section" style="display:none;">
+  <label for="cash-code">Enter Cash Code:</label>
+  <input type="text" id="cash-code" placeholder="Your Cash Code" required>
+  
+  <button type="button" id="cash-submit" style="margin-top:10px;">Submit Cash Payment</button>
+  <p id="cash-status"></p>
 </div>
 
         
