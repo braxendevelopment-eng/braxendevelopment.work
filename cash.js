@@ -2,9 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const cashSection = document.getElementById('cash-section');
     const cashCodeInput = document.getElementById('cash-code');
     const submitCashBtn = document.getElementById('submit-cash');
+    const paymentType = document.getElementById('payment-type');
     const MASTER_CASH_CODE = "YOUR_SECRET_CODE"; // replace with your secret code
 
-    cashSection.style.display = 'block';
+    function toggleCashSection() {
+        cashSection.style.display = paymentType.value === 'cash' ? 'block' : 'none';
+    }
 
     cashCodeInput.addEventListener('input', () => {
         if(cashCodeInput.value.trim() === MASTER_CASH_CODE) {
@@ -13,33 +16,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     submitCashBtn.addEventListener('click', async () => {
-        if(cashCodeInput.value.trim() !== MASTER_CASH_CODE) {
-            return alert('Invalid cash code.');
-        }
-
-        const businessName = document.getElementById('businessName').value;
-        const ein = document.getElementById('ein').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const city = document.getElementById('city').value;
-        const state = document.getElementById('state').value;
-        const zip = document.getElementById('zip').value;
-
-        const receiptNumber = 'e-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+        if(paymentType.value !== 'cash') return;
+        if(cashCodeInput.value.trim() !== MASTER_CASH_CODE) return alert('Invalid cash code.');
 
         const data = {
-            businessName,
-            ein,
-            email,
-            phone,
-            address,
-            city,
-            state,
-            zip,
+            businessName: document.getElementById('businessName').value,
+            ein: document.getElementById('ein').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            zip: document.getElementById('zip').value,
             paymentMethod: 'Cash',
             cashCode: cashCodeInput.value.trim(),
-            receiptNumber
+            receiptNumber: 'e-' + Math.random().toString(36).substr(2, 8).toUpperCase()
         };
 
         try {
@@ -50,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if(response.ok) {
-                alert(`Cash payment submitted! Receipt: ${receiptNumber}`);
+                alert(`Cash payment submitted! Receipt: ${data.receiptNumber}`);
                 cashCodeInput.value = '';
             } else {
                 alert('Submission failed. Please try again.');
@@ -60,4 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Error sending cash payment data.');
         }
     });
+
+    paymentType.addEventListener('change', toggleCashSection);
+    toggleCashSection(); // initial load
 });
