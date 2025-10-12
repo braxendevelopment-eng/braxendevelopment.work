@@ -190,5 +190,26 @@
 <!-- Form submission -->
 <script src="submission.js"></script>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tierSelect = document.getElementById('tier-select');
+    const paymentType = document.getElementById('payment-type');
+
+    // If PayPal is the selected method, render the button immediately
+    if (paymentType.value === 'paypal' && window.paypalToggle) {
+        window.paypalToggle();
+        document.getElementById('paypal-section').style.display = 'block';
+    }
+
+    // Optional: re-render PayPal button whenever tier changes
+    tierSelect.addEventListener('change', () => {
+        if (paymentType.value === 'paypal' && window.paypalToggle) {
+            window.paypalToggle();
+        }
+    });
+});
+</script>
+
+  
 </body>
             </html>
