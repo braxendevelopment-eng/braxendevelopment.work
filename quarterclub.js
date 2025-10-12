@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Elements ---
     const tierSelect = document.getElementById('tier-select');
     const billingCycle = document.getElementById('billing-cycle');
     const paymentType = document.getElementById('payment-type');
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cashSection = document.getElementById('cash-section');
     const cashCodeInput = document.getElementById('cash-code');
     const submitCashBtn = document.getElementById('submit-cash');
-    const MASTER_CASH_CODE = "YOUR_SECRET_CODE"; // replace
+    const MASTER_CASH_CODE = "#00043000#"; // updated master code
 
     const planIds = {
         '0.25': 'P-PLANID1',
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '100': 'P-PLANID7'
     };
 
-    // ----------------- Toggle Payment Sections -----------------
+    // --- Toggle Sections ---
     function togglePaymentSections() {
         paypalContainer.style.display = 'none';
         polygonSection.style.display = 'none';
@@ -37,28 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if(paymentType.value === 'paypal') {
             paypalContainer.style.display = 'block';
             renderPayPalButton();
-        }
-        if(paymentType.value === 'polygon') {
+        } else if(paymentType.value === 'polygon') {
             polygonSection.style.display = 'block';
             updatePolygonGasFee();
-        }
-        if(paymentType.value === 'cash') {
+        } else if(paymentType.value === 'cash') {
             cashSection.style.display = 'block';
         }
     }
 
     paymentType.addEventListener('change', togglePaymentSections);
 
-    // ----------------- PayPal Button -----------------
-    function getFinalAmount() {
-        const basePrice = parseFloat(tierSelect.value);
-        if(!basePrice && !tierSelect.value.includes('_pdf')) return null;
-        let amount = basePrice;
-        if(billingCycle.value === 'annual') amount *= 12;
-        if(billingCycle.value === 'monthly' && amount < 5) return null;
-        return amount.toFixed(2);
-    }
-
+    // --- PayPal ---
     function renderPayPalButton() {
         paypalContainer.innerHTML = '';
 
@@ -97,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(paymentType.value === 'paypal') renderPayPalButton();
     });
 
-    // ----------------- Polygon Section -----------------
+    // --- Polygon ---
     function updatePolygonGasFee() {
         const gasFeeEl = document.getElementById('polygon-gas-fee');
         fetch('https://gasstation.polygon.technology/v2')
@@ -120,12 +110,18 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Polygon address copied!');
     });
 
-    // ----------------- Cash Section -----------------
-    submitCashBtn.addEventListener('click', async () => {
+    submitPolygonBtn.addEventListener('click', async () => {
+        const hash = polygonHashInput.value.trim();
+        if(!hash) return alert('Please enter transaction hash.');
+        document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+    });
+
+    // --- Cash ---
+    submitCashBtn.addEventListener('click', () => {
         if(cashCodeInput.value.trim() !== MASTER_CASH_CODE) return alert('Invalid cash code.');
         document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
     });
 
-    // ----------------- Initialize -----------------
-    togglePaymentSections(); // Show correct section on page load
+    // --- Initialize ---
+    togglePaymentSections(); // show correct section on page load
 });
