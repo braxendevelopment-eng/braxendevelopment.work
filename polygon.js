@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const polygonWallet = document.getElementById('polygon-wallet');
     const polygonHashInput = document.getElementById('polygon-hash');
     const copyPolygonBtn = document.getElementById('copy-polygon');
-    const submitPolygonBtn = document.getElementById('submit-polygon'); // add a submit button in HTML
+    const submitPolygonBtn = document.getElementById('submit-polygon');
+    const paymentType = document.getElementById('payment-type');
 
-    // Fetch gas fee
     function updatePolygonGasFee() {
         const gasFeeEl = document.getElementById('polygon-gas-fee');
         fetch('https://gasstation.polygon.technology/v2')
@@ -16,54 +16,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     .then(res => res.json())
                     .then(priceData => {
                         const maticUsd = priceData['matic-network'].usd;
-                        const gasMatic = fastGasGwei / 1e9; // fixed conversion
+                        const gasMatic = fastGasGwei / 1e9;
                         const gasUsd = gasMatic * maticUsd;
                         gasFeeEl.textContent = `Estimated Gas Fee: ${gasMatic.toFixed(6)} MATIC (~$${gasUsd.toFixed(2)} USD)`;
                     });
-            }).catch(() => {
+            })
+            .catch(() => {
                 gasFeeEl.textContent = "Estimated Gas Fee: Unavailable";
             });
     }
 
-    // Copy address
+    function togglePolygonSection() {
+        polygonSection.style.display = paymentType.value === 'polygon' ? 'block' : 'none';
+        if(paymentType.value === 'polygon') updatePolygonGasFee();
+    }
+
     copyPolygonBtn.addEventListener('click', () => {
         polygonWallet.select();
         document.execCommand('copy');
         alert('Polygon address copied!');
     });
 
-    // Submit Polygon payment data
     submitPolygonBtn.addEventListener('click', async () => {
-        const businessName = document.getElementById('businessName').value;
-        const ein = document.getElementById('ein').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const city = document.getElementById('city').value;
-        const state = document.getElementById('state').value;
-        const zip = document.getElementById('zip').value;
-        const hash = polygonHashInput.value;
-
-        if (!hash) {
-            alert('Please enter your transaction hash.');
-            return;
-        }
-
-        const receiptNumber = 'e-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+        if(paymentType.value !== 'polygon') return;
 
         const data = {
-            businessName,
-            ein,
-            email,
-            phone,
-            address,
-            city,
-            state,
-            zip,
+            businessName: document.getElementById('businessName').value,
+            ein: document.getElementById('ein').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            zip: document.getElementById('zip').value,
             paymentMethod: 'Polygon',
-            transactionHash: hash,
-            receiptNumber
+            transactionHash: polygonHashInput.value,
+            receiptNumber: 'e-' + Math.random().toString(36).substr(2, 8).toUpperCase()
         };
+
+        if(!data.transactionHash) return alert('Please enter your transaction hash.');
 
         try {
             const response = await fetch('https://submission-logger.braxendevelopment.workers.dev/', {
@@ -72,18 +63,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(data)
             });
 
-            if (response.ok) {
-                alert(`Polygon payment submitted! Receipt: ${receiptNumber}`);
+            if(response.ok) {
+                alert(`Polygon payment submitted! Receipt: ${data.receiptNumber}`);
                 polygonHashInput.value = '';
             } else {
                 alert('Submission failed. Please try again.');
             }
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            console.error(err);
             alert('Error sending payment data.');
         }
     });
 
-    polygonSection.style.display = 'block';
-    updatePolygonGasFee();
+    paymentType.addEventListener('change', togglePolygonSection);
+    togglePolygonSection(); // initial load
 });
