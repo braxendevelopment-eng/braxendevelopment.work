@@ -133,8 +133,11 @@
           <option value="cash">Cash</option>
         </select>
 
-        <div id="paypal-button-container"></div>
-<input type="hidden" id="paypal-id" />
+        <!-- PayPal Section -->
+<div id="paypal-section">
+    <div id="paypal-button-container"></div>
+    <input type="hidden" id="paypal-id" />
+</div>
         <div id="polygon-section" style="display:none;">
   <p>Send payment to this Polygon Wallet:</p>
 
@@ -179,7 +182,7 @@
   <!-- JS Logic -->
  <!-- Core Quarter Club logic -->
 <script src="js/quarterclub.js"></script>
-
+<script src="js/toggle.js"></script>
 <!-- Payment-specific scripts -->
 <script src="js/paypal.js"></script>
 <script src="js/polygon.js"></script>
