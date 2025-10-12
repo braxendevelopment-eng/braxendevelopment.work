@@ -25,44 +25,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderPayPalButton() {
-        const amount = getFinalAmount();
-        if (!amount) return;
+    const paypalContainer = document.getElementById('paypal-button-container');
+    paypalContainer.innerHTML = ''; // Clear previous buttons
 
-        paypalContainer.innerHTML = '';
-
-        // Check if one-time payment (PDF)
-        if (tierSelect.value.includes('_pdf')) {
-            paypal.Buttons({
-                createOrder: (data, actions) => actions.order.create({
-                    purchase_units: [{ amount: { value: '10.00' } }]
-                }),
-                onApprove: (data, actions) => actions.order.capture().then(details => {
-                    alert(`One-time purchase completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
-                }),
-                onError: (err) => {
-                    console.error(err);
-                    alert('PayPal error.');
-                }
-            }).render('#paypal-button-container');
-            return;
-        }
-
-        // Recurring subscription
-        const selectedPlanId = planIds[tierSelect.value];
+    // Check if one-time payment (PDF)
+    if (tierSelect.value.includes('_pdf')) {
         paypal.Buttons({
-            createSubscription: (data, actions) => actions.subscription.create({ plan_id: selectedPlanId }),
-            onApprove: (data, actions) => {
-                alert(`Subscription completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
-            },
+            createOrder: (data, actions) => actions.order.create({
+                purchase_units: [{ amount: { value: '10.00' } }]
+            }),
+            onApprove: (data, actions) => actions.order.capture().then(details => {
+                alert(`One-time purchase completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
+                // Trigger submission.js
+                document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+            }),
             onError: (err) => {
                 console.error(err);
-                alert('PayPal subscription error.');
+                alert('PayPal error.');
             }
         }).render('#paypal-button-container');
+        return;
     }
 
-    tierSelect.addEventListener('change', renderPayPalButton);
-    billingCycle.addEventListener('change', renderPayPalButton);
+    // Recurring subscription
+    const selectedPlanId = planIds[tierSelect.value];
+    paypal.Buttons({
+        createSubscription: (data, actions) => actions.subscription.create({ plan_id: selectedPlanId }),
+        onApprove: (data, actions) => {
+            // Capture PayPal subscription ID
+            document.getElementById('paypal-id').value = data.subscriptionID;
 
-    renderPayPalButton();
-});
+            alert(`Subscription completed: ${tierSelect.options[tierSelect.selectedIndex].text}`);
+
+            // Trigger submission.js
+            document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+        },
+        onError: (err) => {
+            console.error(err);
+            alert('PayPal subscription error.');
+        }
+    }).render('#paypal-button-container');
+    }
