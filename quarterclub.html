@@ -134,7 +134,7 @@
         </select>
 
         <div id="paypal-button-container"></div>
-
+<input type="hidden" id="paypal-id" />
         <div id="polygon-section" style="display:none;">
   <p>Send payment to this Polygon Wallet:</p>
 
@@ -156,11 +156,12 @@
         </div>
 
         <div id="cash-section" style="display:none;">
-          <label for="cash-code">Enter Cash Code:</label>
-          <input type="text" id="cash-code" placeholder="Master Cash Code" required>
-        </div>
+    <label for="cash-code">Enter Cash Code:</label>
+    <input type="text" id="cash-code" placeholder="Your Cash Code" required>
+    <button type="button" id="submit-cash" style="margin-top:10px;">Submit Cash Payment</button>
+</div>
 
-        <input type="hidden" id="paypal-id" />
+        
         
         <button type="submit">Submit & Pay</button>
       </form>
@@ -175,6 +176,15 @@
   <script src="https://www.paypal.com/sdk/js?client-id=AdefJjr7m6mZkDwKqt_nyTiOSRCXIThl2h41bgHzev27XWXZFLyGhXF7i8RIfM1ZDucgNVzkdb-w5bnd&currency=USD"></script>
 
   <!-- JS Logic -->
-  <script src="quarterclub.js"></script>
+ <!-- Core Quarter Club logic -->
+<script src="js/quarterclub.js"></script>
+
+<!-- Payment-specific scripts -->
+<script src="js/paypal.js"></script>
+<script src="js/polygon.js"></script>
+<script src="js/cash.js"></script>
+
+<!-- Submission handler -->
+<script src="js/submission.js"></script>
 </body>
 </html>
