@@ -17,12 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function renderPayPalButton() {
-        if(paymentType.value !== 'paypal') {
+        // Only render if PayPal is selected AND container is visible
+        if(paymentType.value !== 'paypal' || paypalContainer.style.display === 'none') {
             paypalContainer.innerHTML = '';
             return;
         }
 
-        paypalContainer.innerHTML = '';
+        paypalContainer.innerHTML = ''; // Clear any previous buttons
 
         // One-time PDF purchase
         if(tierSelect.value.includes('_pdf')) {
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
                 }),
                 onError: (err) => {
-                    console.error('PayPal Error:', err);
+                    console.error(err);
                     alert('PayPal error occurred.');
                 }
             }).render('#paypal-button-container');
@@ -54,17 +55,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
             },
             onError: (err) => {
-                console.error('PayPal Subscription Error:', err);
+                console.error(err);
                 alert('PayPal subscription error.');
             }
         }).render('#paypal-button-container');
     }
 
-    // Re-render when tier, billing, or payment type changes
+    // Re-render whenever tier, billing, or payment type changes
     tierSelect.addEventListener('change', renderPayPalButton);
     billingCycle.addEventListener('change', renderPayPalButton);
     paymentType.addEventListener('change', renderPayPalButton);
 
     // Initial render
-    setTimeout(renderPayPalButton, 100); // slight delay ensures SDK is loaded
+    renderPayPalButton();
 });
