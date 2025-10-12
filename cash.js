@@ -1,28 +1,21 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const cashSubmit = document.getElementById('cash-submit');
-  const cashStatus = document.getElementById('cash-status');
+// cash-toggle.js
+window.cashToggle = function() {
+    const cashSection = document.getElementById('cash-section');
+    const cashCodeInput = document.getElementById('cash-code');
+    const submitCashBtn = document.getElementById('submit-cash');
 
-  if (!cashSubmit) return;
+    // Master code for cash payments
+    const MASTER_CASH_CODE = "#00043000#";
 
-  cashSubmit.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    const amount = document.getElementById('tier-select').value;
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-
-    if (!name || !email) {
-      alert('Please enter your name and email for record keeping.');
-      return;
-    }
-
-    cashStatus.textContent = 'Recording your cash pledge...';
-
-    // Simulated form submission (replace with backend logging later)
-    setTimeout(() => {
-      cashStatus.textContent = 'Cash payment recorded successfully!';
-      alert(`Cash pledge for $${amount} logged. Please send your payment via the listed instructions.`);
-      document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-    }, 1500);
-  });
-});
+    // Show/hide cash section (main toggle.js handles display)
+    // Submit Cash Payment
+    submitCashBtn.addEventListener('click', () => {
+        if(cashCodeInput.value.trim() !== MASTER_CASH_CODE) {
+            alert('Invalid cash code.');
+            return;
+        }
+        alert('Cash payment validated. Submitting form...');
+        document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
+        cashCodeInput.value = ''; // reset input
+    });
+};
