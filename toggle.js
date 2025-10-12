@@ -1,36 +1,37 @@
-// toggle.js - main toggle controller
+// toggle.js
 document.addEventListener('DOMContentLoaded', () => {
     const paymentTypeSelect = document.getElementById('payment-type');
+
     const paypalSection = document.getElementById('paypal-button-container');
     const polygonSection = document.getElementById('polygon-section');
     const cashSection = document.getElementById('cash-section');
 
-    function togglePaymentSections() {
+    function toggleSections() {
         // Hide all sections first
         paypalSection.style.display = 'none';
         polygonSection.style.display = 'none';
         cashSection.style.display = 'none';
 
-        // Show the selected section
-        switch (paymentTypeSelect.value) {
+        // Show only the selected section
+        switch(paymentTypeSelect.value) {
             case 'paypal':
                 paypalSection.style.display = 'block';
-                if (typeof window.paypalToggle === 'function') window.paypalToggle();
+                if(typeof window.paypalToggle === 'function') window.paypalToggle();
                 break;
             case 'polygon':
                 polygonSection.style.display = 'block';
-                if (typeof window.polygonToggle === 'function') window.polygonToggle();
+                if(typeof window.polygonToggle === 'function') window.polygonToggle();
                 break;
             case 'cash':
                 cashSection.style.display = 'block';
-                if (typeof window.cashToggle === 'function') window.cashToggle();
+                if(typeof window.cashToggle === 'function') window.cashToggle();
                 break;
         }
     }
 
-    // Initialize display on page load
-    togglePaymentSections();
+    // Initialize display
+    toggleSections();
 
-    // Update display when selection changes
-    paymentTypeSelect.addEventListener('change', togglePaymentSections);
+    // Update display when payment method changes
+    paymentTypeSelect.addEventListener('change', toggleSections);
 });
