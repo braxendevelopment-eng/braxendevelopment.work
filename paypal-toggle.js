@@ -2,21 +2,13 @@ window.paypalToggle = function() {
     const tierSelect = document.getElementById('tier-select');
     const paypalContainer = document.getElementById('paypal-button-container');
 
-    // Clear any previous buttons
-    paypalContainer.innerHTML = '';
-
     const amounts = {
-        '0.25': 3,   // $0.25/mo billed $3
-        '1': 12,
-        '2': 24,
-        '5': 60,
-        '10': 120,
-        '20': 240,
-        '50': 600,
-        '100': 1200,
+        '0.25': 3, '1': 12, '2': 24, '5': 60,
+        '10': 120, '20': 240, '50': 600, '100': 1200,
         '10_pdf': 10
     };
 
+    paypalContainer.innerHTML = '';
     const amount = amounts[tierSelect.value];
     if (!amount) return;
 
@@ -28,9 +20,6 @@ window.paypalToggle = function() {
             alert(`Payment completed: $${amount.toFixed(2)}`);
             document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
         }),
-        onError: (err) => { 
-            console.error(err); 
-            alert('PayPal error occurred.'); 
-        }
+        onError: (err) => { console.error(err); alert('PayPal error occurred.'); }
     }).render('#paypal-button-container');
 };
