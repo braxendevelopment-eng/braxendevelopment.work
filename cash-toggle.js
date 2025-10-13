@@ -1,23 +1,20 @@
+// cash-toggle.js
 window.cashToggle = function() {
-    const cashSection = document.getElementById('cash-section');
-    const cashStatus = document.getElementById('cash-status');
-    const submitButton = document.getElementById('cash-submit');
+  const cashSubmit = document.getElementById('cash-submit');
+  const cashCodeInput = document.getElementById('cash-code');
+  const cashStatus = document.getElementById('cash-status');
 
-    // Show section and reset text
-    cashSection.style.display = 'block';
-    cashStatus.textContent = '';
+  cashSubmit.addEventListener('click', () => {
+    const code = cashCodeInput.value.trim();
+    if (!code) {
+      cashStatus.textContent = "Please enter your cash code.";
+      return;
+    }
 
-    // Handle Cash submission
-    submitButton.onclick = () => {
-        const code = document.getElementById('cash-code').value.trim();
-        if (!code) {
-            alert('Please enter your Cash Code before submitting.');
-            return;
-        }
-        cashStatus.textContent = "Submitting Cash payment...";
-        setTimeout(() => {
-            cashStatus.textContent = "Cash payment submitted successfully!";
-            document.getElementById('quarterclub-form').submit();
-        }, 1000);
-    };
+    // Optional: You can validate code against a server here
+    cashStatus.textContent = "Cash code accepted!";
+
+    // Submit form after successful verification
+    document.getElementById('quarterclub-form').submit();
+  });
 };
