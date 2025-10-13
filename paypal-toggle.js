@@ -25,7 +25,7 @@ window.paypalToggle = function() {
         onApprove: (data, actions) => actions.order.capture().then(() => {
             alert(`Payment completed: $${amount.toFixed(2)}`);
             // auto-submit form after PayPal completes
-            document.getElementById('quarterclub-form').submit();
+            if (window.handleSubmit) await window.handleSubmit();
         }),
         onError: (err) => { console.error(err); alert('PayPal error occurred.'); }
     }).render('#paypal-button-container');
