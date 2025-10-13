@@ -119,7 +119,7 @@
         </select>
 
         <p id="price-display" style="font-weight:bold; margin:5px 0;"></p>
-<!-- Payment Method Selector -->
+!-- Payment Method Selector -->
 <label for="payment-type">Payment Method:</label>
 <select id="payment-type" required>
   <option value="paypal">PayPal</option>
@@ -130,7 +130,6 @@
 <!-- PayPal Section -->
 <div id="paypal-section" style="display:none;">
   <div id="paypal-button-container"></div>
-  <input type="hidden" id="paypal-id" />
 </div>
 
 <!-- Polygon Section -->
@@ -152,6 +151,7 @@
   <button type="button" id="cash-submit" style="margin-top:10px;">Submit Cash Payment</button>
   <p id="cash-status"></p>
 </div>
+
       </form>
     </section>
   </main>
@@ -195,13 +195,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const tierSelect = document.getElementById('tier-select');
     const paymentType = document.getElementById('payment-type');
 
-    // If PayPal is the selected method, render the button immediately
-    if (paymentType.value === 'paypal' && window.paypalToggle) {
-        window.paypalToggle();
-        document.getElementById('paypal-section').style.display = 'block';
+    const paypalSection = document.getElementById('paypal-section');
+    const polygonSection = document.getElementById('polygon-section');
+    const cashSection = document.getElementById('cash-section');
+
+    function hideAllSections() {
+        paypalSection.style.display = 'none';
+        polygonSection.style.display = 'none';
+        cashSection.style.display = 'none';
     }
 
-    // Optional: re-render PayPal button whenever tier changes
+    function handlePaymentTypeChange() {
+        hideAllSections();
+
+        switch (paymentType.value) {
+            case 'paypal':
+                paypalSection.style.display = 'block';
+                if (window.paypalToggle) window.paypalToggle();
+                break;
+            case 'polygon':
+                polygonSection.style.display = 'block';
+                if (window.polygonToggle) window.polygonToggle();
+                break;
+            case 'cash':
+                cashSection.style.display = 'block';
+                if (window.cashToggle) window.cashToggle();
+                break;
+        }
+    }
+
+    // Run once on page load
+    handlePaymentTypeChange();
+
+    // Listen for changes to payment method
+    paymentType.addEventListener('change', handlePaymentTypeChange);
+
+    // Re-render PayPal button whenever tier changes
     tierSelect.addEventListener('change', () => {
         if (paymentType.value === 'paypal' && window.paypalToggle) {
             window.paypalToggle();
