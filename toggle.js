@@ -1,33 +1,51 @@
 // toggle.js
 document.addEventListener('DOMContentLoaded', () => {
-document.addEventListener('DOMContentLoaded', () => {
-    const paymentTypeSelect = document.getElementById('payment-type');
+  const tierSelect = document.getElementById('tier-select');
+  const paymentType = document.getElementById('payment-type');
 
-    const paypalSection = document.getElementById('paypal-section');
-    const polygonSection = document.getElementById('polygon-section');
-    const cashSection = document.getElementById('cash-section');
+  const paypalSection = document.getElementById('paypal-section');
+  const polygonSection = document.getElementById('polygon-section');
+  const cashSection = document.getElementById('cash-section');
 
-    function toggleSections() {
-        paypalSection.style.display = 'none';
-        polygonSection.style.display = 'none';
-        cashSection.style.display = 'none';
+  // --- Hide all payment sections ---
+  function hideAllSections() {
+    paypalSection.style.display = 'none';
+    polygonSection.style.display = 'none';
+    cashSection.style.display = 'none';
+  }
 
-        switch (paymentTypeSelect.value) {
-            case 'paypal':
-                paypalSection.style.display = 'block';
-                if (window.paypalToggle) window.paypalToggle();
-                break;
-            case 'polygon':
-                polygonSection.style.display = 'block';
-                if (window.polygonToggle) window.polygonToggle();
-                break;
-            case 'cash':
-                cashSection.style.display = 'block';
-                if (window.cashToggle) window.cashToggle();
-                break;
-        }
+  // --- Handle Payment Type Change ---
+  function handlePaymentTypeChange() {
+    hideAllSections();
+
+    switch (paymentType.value) {
+      case 'paypal':
+        paypalSection.style.display = 'block';
+        if (window.paypalToggle) window.paypalToggle();
+        break;
+
+      case 'polygon':
+        polygonSection.style.display = 'block';
+        if (window.polygonToggle) window.polygonToggle();
+        break;
+
+      case 'cash':
+        cashSection.style.display = 'block';
+        if (window.cashToggle) window.cashToggle();
+        break;
     }
+  }
 
-    toggleSections();
-    paymentTypeSelect.addEventListener('change', toggleSections);
+  // --- Run immediately on load ---
+  handlePaymentTypeChange();
+
+  // --- Event listeners ---
+  paymentType.addEventListener('change', handlePaymentTypeChange);
+
+  // --- Optional: Re-render PayPal button when tier changes ---
+  tierSelect.addEventListener('change', () => {
+    if (paymentType.value === 'paypal' && window.paypalToggle) {
+      window.paypalToggle();
+    }
+  });
 });
