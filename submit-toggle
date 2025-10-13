@@ -1,0 +1,19 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const paymentType = document.getElementById('payment-type');
+  const submitButton = document.querySelector('button[type="submit"]');
+
+  function updateSubmitVisibility() {
+    // Show submit button only for Polygon and Cash
+    if (paymentType.value === 'paypal') {
+      submitButton.style.display = 'none';
+    } else {
+      submitButton.style.display = 'inline-block';
+    }
+  }
+
+  // Initialize visibility on page load
+  updateSubmitVisibility();
+
+  // Update visibility whenever payment type changes
+  paymentType.addEventListener('change', updateSubmitVisibility);
+});
