@@ -13,7 +13,7 @@ window.polygonToggle = function() {
     polygonStatus.textContent = "Verifying transaction...";
 
     try {
-      const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com");
+      const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com"); 
       const tx = await provider.getTransaction(hash);
       if (!tx) throw new Error("Transaction not found.");
 
@@ -24,8 +24,9 @@ window.polygonToggle = function() {
 
       polygonStatus.textContent = `Transaction confirmed: ${ethers.formatEther(tx.value)} MATIC sent.`;
 
-      // Submit the form now that transaction is verified
-      document.getElementById('quarterclub-form').submit();
+      // Automatically submit form after successful Polygon payment
+      if (window.handleSubmit) await window.handleSubmit();
+
     } catch (err) {
       polygonStatus.textContent = "Error verifying transaction: " + err.message;
     }
