@@ -21,7 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
     switch (paymentType.value) {
       case 'paypal':
         paypalSection.style.display = 'block';
-        if (window.paypalToggle) window.paypalToggle();
+        if (window.paypalToggle) {
+          // Clear any existing PayPal buttons before re-rendering
+          const container = document.getElementById('paypal-button-container');
+          container.innerHTML = '';
+          window.paypalToggle();
+        }
         break;
 
       case 'polygon':
@@ -45,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Optional: Re-render PayPal button when tier changes ---
   tierSelect.addEventListener('change', () => {
     if (paymentType.value === 'paypal' && window.paypalToggle) {
+      const container = document.getElementById('paypal-button-container');
+      container.innerHTML = '';
       window.paypalToggle();
     }
   });
