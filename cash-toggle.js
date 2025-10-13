@@ -1,24 +1,23 @@
-// cash-toggle.js
-document.addEventListener('DOMContentLoaded', () => {
+window.cashToggle = function() {
     const cashSection = document.getElementById('cash-section');
-    const cashCodeInput = document.getElementById('cash-code');
-    const submitCashBtn = document.getElementById('submit-cash');
+    const cashStatus = document.getElementById('cash-status');
+    const submitButton = document.getElementById('cash-submit');
 
-    const MASTER_CASH_CODE = "#00043000#"; // Your master cash code
+    // Show section and reset text
+    cashSection.style.display = 'block';
+    cashStatus.textContent = '';
 
-    // Expose toggle function for main toggle.js
-    window.cashToggle = function() {
-        // Optionally, reset input field whenever toggled on
-        cashCodeInput.value = '';
-    };
-
-    submitCashBtn.addEventListener('click', () => {
-        const enteredCode = cashCodeInput.value.trim();
-        if (enteredCode !== MASTER_CASH_CODE) {
-            alert('Invalid cash code.');
+    // Handle Cash submission
+    submitButton.onclick = () => {
+        const code = document.getElementById('cash-code').value.trim();
+        if (!code) {
+            alert('Please enter your Cash Code before submitting.');
             return;
         }
-        // Dispatch the main form submit event
-        document.getElementById('quarterclub-form').dispatchEvent(new Event('submit'));
-    });
-});
+        cashStatus.textContent = "Submitting Cash payment...";
+        setTimeout(() => {
+            cashStatus.textContent = "Cash payment submitted successfully!";
+            document.getElementById('quarterclub-form').submit();
+        }, 1000);
+    };
+};
