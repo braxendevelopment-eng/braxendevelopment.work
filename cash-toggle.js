@@ -4,28 +4,16 @@ window.cashToggle = function() {
   const cashCodeInput = document.getElementById('cash-code');
   const cashStatus = document.getElementById('cash-status');
 
-  // Remove previous listeners to avoid duplicates
-  const newCashSubmit = cashSubmit.cloneNode(true);
-  cashSubmit.parentNode.replaceChild(newCashSubmit, cashSubmit);
-
-  newCashSubmit.addEventListener('click', () => {
+  cashSubmit.addEventListener('click', () => {
     const code = cashCodeInput.value.trim();
     if (!code) {
       cashStatus.textContent = "Please enter your cash code.";
       return;
     }
 
-    cashStatus.textContent = "Verifying cash code...";
+    // Optional: verify code format or against a server here
 
-    try {
-      // Here you can add any custom verification logic
-      // For now, just assume valid
-      cashStatus.textContent = `Cash code "${code}" accepted.`;
-
-      // Auto-submit form after successful verification
-      document.getElementById('quarterclub-form').submit();
-    } catch (err) {
-      cashStatus.textContent = "Error verifying cash code: " + err.message;
-    }
+    cashStatus.textContent = "Cash code accepted. Submitting form...";
+    document.getElementById('quarterclub-form').submit();
   });
 };
