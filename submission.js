@@ -17,11 +17,11 @@ window.handleSubmit = async function() {
     };
 
     try {
-        const response = await fetch("https://braxen.YOUR_WORKER.workers.dev", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        });
+        const response = await fetch('https://quarterclub-worker.braxendevelopment.workers.dev/', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(formData)
+});
 
         if (!response.ok) throw new Error("Failed to submit form");
 
