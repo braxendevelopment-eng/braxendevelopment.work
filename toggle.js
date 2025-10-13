@@ -1,6 +1,4 @@
-// toggle.js
-document.addEventListener('DOMContentLoaded', () => {
-  const tierSelect = document.getElementById('tier-select');
+// toggle.jsdocument.addEventListener('DOMContentLoaded', () => {
   const paymentType = document.getElementById('payment-type');
 
   const paypalSection = document.getElementById('paypal-section');
@@ -21,12 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
         paypalSection.style.display = 'block';
         if (window.paypalToggle) window.paypalToggle();
         break;
-
       case 'polygon':
         polygonSection.style.display = 'block';
         if (window.polygonToggle) window.polygonToggle();
         break;
-
       case 'cash':
         cashSection.style.display = 'block';
         if (window.cashToggle) window.cashToggle();
@@ -34,13 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Initial toggle on page load
   handlePaymentTypeChange();
-  paymentType.addEventListener('change', handlePaymentTypeChange);
 
-  // Re-render PayPal button on tier change
-  tierSelect.addEventListener('change', () => {
-    if (paymentType.value === 'paypal' && window.paypalToggle) {
-      window.paypalToggle();
-    }
-  });
+  // Re-toggle whenever user changes payment type
+  paymentType.addEventListener('change', handlePaymentTypeChange);
 });
