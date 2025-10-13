@@ -7,26 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const polygonSection = document.getElementById('polygon-section');
   const cashSection = document.getElementById('cash-section');
 
-  // --- Hide all payment sections ---
   function hideAllSections() {
     paypalSection.style.display = 'none';
     polygonSection.style.display = 'none';
     cashSection.style.display = 'none';
   }
 
-  // --- Handle Payment Type Change ---
   function handlePaymentTypeChange() {
     hideAllSections();
 
     switch (paymentType.value) {
       case 'paypal':
         paypalSection.style.display = 'block';
-        if (window.paypalToggle) {
-          // Clear any existing PayPal buttons before re-rendering
-          const container = document.getElementById('paypal-button-container');
-          container.innerHTML = '';
-          window.paypalToggle();
-        }
+        if (window.paypalToggle) window.paypalToggle();
         break;
 
       case 'polygon':
@@ -41,17 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Run immediately on load ---
   handlePaymentTypeChange();
-
-  // --- Event listeners ---
   paymentType.addEventListener('change', handlePaymentTypeChange);
 
-  // --- Optional: Re-render PayPal button when tier changes ---
+  // Re-render PayPal button on tier change
   tierSelect.addEventListener('change', () => {
     if (paymentType.value === 'paypal' && window.paypalToggle) {
-      const container = document.getElementById('paypal-button-container');
-      container.innerHTML = '';
       window.paypalToggle();
     }
   });
