@@ -11,17 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Please enter a valid EIN in format XX-XXXXXXX.');
       return false;
     }
-    // Add other validations here if needed
+    // Add other validations if needed
     return true;
   }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
+  async function handleSubmit() {
     // Run validation first
     if (!validateFormFields()) return;
 
-    // Collect form data
     const data = {
       businessName: document.getElementById("business-name").value,
       ein: document.getElementById("business-ein").value,
@@ -46,5 +43,19 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error(err);
       alert("Error submitting form.");
     }
+  }
+
+  // Standard form submission
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleSubmit();
   });
+
+  // Override PayPal auto-submit
+  if (window.paypal) {
+    const originalSubmit = form.submit;
+    form.submit = () => {
+      handleSubmit(); // run the same logic as normal submit
+    };
+  }
 });
