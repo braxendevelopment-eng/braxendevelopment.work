@@ -17,8 +17,7 @@ window.handleSubmit = async function() {
     };
 
     try {
-        // POST to your Worker
-        const response = await fetch("https://quarterclub-worker.braxendevelopment.workers.dev", {
+        const response = await fetch("https://api.braxendevelopment.work", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -28,10 +27,7 @@ window.handleSubmit = async function() {
 
         const result = await response.json();
 
-        // Alert user with receipt ID
         alert(`Submission sent successfully! Receipt ID: ${result.receiptID}`);
-
-        // Optional: reset the form
         form.reset();
 
     } catch (err) {
@@ -39,3 +35,4 @@ window.handleSubmit = async function() {
         alert("Error submitting form: " + err.message);
     }
 };
+
