@@ -17,15 +17,17 @@ window.handleSubmit = async function() {
     };
 
     try {
-        const response = await fetch('https://quarterclub-worker.braxendevelopment.workers.dev/', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(formData)
-});
+        const response = await fetch('https://quarterclub-worker.braxendevelopment.workers.dev/store', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data) // <-- send `data`, not `formData`
+        });
 
         if (!response.ok) throw new Error("Failed to submit form");
 
-        alert("Submission sent successfully!");
+        const result = await response.json();
+        alert(`Submission sent successfully! Receipt ID: ${result.receiptID}`);
+
         form.reset(); // optional: reset the form after successful submission
     } catch (err) {
         console.error(err);
