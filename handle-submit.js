@@ -17,8 +17,8 @@ window.handleSubmit = async function() {
     };
 
     try {
-        // POST to your Worker via the production route
-        const response = await fetch("https://braxendevelopment-work.pages.dev/submit", {
+        // POST to your Worker
+        const response = await fetch("https://quarterclub-worker.braxendevelopment.workers.dev", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -27,6 +27,8 @@ window.handleSubmit = async function() {
         if (!response.ok) throw new Error(`Server responded with ${response.status}`);
 
         const result = await response.json();
+
+        // Alert user with receipt ID
         alert(`Submission sent successfully! Receipt ID: ${result.receiptID}`);
 
         // Optional: reset the form
