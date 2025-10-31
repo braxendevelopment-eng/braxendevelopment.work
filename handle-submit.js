@@ -2,6 +2,7 @@
 window.handleSubmit = async function() {
     const form = document.getElementById('quarterclub-form');
 
+    // Gather all form data
     const data = {
         businessName: document.getElementById('business-name').value,
         ein: document.getElementById('business-ein').value,
@@ -16,7 +17,8 @@ window.handleSubmit = async function() {
     };
 
     try {
-        const response = await fetch("https://braxen.YOUR_WORKER.workers.dev", {
+        // Replace with your actual deployed Worker URL
+        const response = await fetch("https://quarterclub-worker.braxendevelopment.workers.dev/store", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -24,7 +26,13 @@ window.handleSubmit = async function() {
 
         if (!response.ok) throw new Error(`Server responded with ${response.status}`);
 
-        alert("Submission sent successfully!");
+        // Parse the JSON response to get the receipt ID
+        const result = await response.json();
+        alert(`Submission sent successfully! Receipt ID: ${result.receiptID}`);
+
+        // Optional: reset the form after submission
+        form.reset();
+
     } catch (err) {
         console.error(err);
         alert("Error submitting form: " + err.message);
