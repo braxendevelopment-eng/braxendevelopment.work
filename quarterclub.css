@@ -1,4 +1,45 @@
 /* ----------------- General Styles ----------------- */
+:root {
+  --glow-color: #b94bff;
+  --background-dark: #000;
+  --text-light: #fff;
+}
+
+.glow {
+  color: var(--glow-color);
+  text-shadow:
+    0 0 5px var(--glow-color),
+    0 0 10px var(--glow-color),
+    0 0 20px var(--glow-color);
+}
+
+button, select, input {
+  border: 1px solid var(--glow-color);
+  background: #111;
+  color: var(--text-light);
+  box-shadow: 0 0 10px transparent;
+  transition: 0.3s ease;
+}
+
+button:hover, select:focus, input:focus {
+  box-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
+  border-color: var(--glow-color);
+}
+
+a {
+  color: var(--glow-color);
+  text-decoration: underline;
+}
+a:hover {
+  text-shadow: 0 0 8px var(--glow-color);
+}
+
+h1, h2, h3 {
+  color: var(--text-light);
+  text-shadow: 0 0 10px var(--glow-color);
+}
+
+
 body {
     background-color: #000;
     color: #fff;
