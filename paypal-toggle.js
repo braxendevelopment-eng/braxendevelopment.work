@@ -2,6 +2,15 @@ window.paypalToggle = function() {
   const tierSelect = document.getElementById('tier-select');
   const paypalContainer = document.getElementById('paypal-button-container');
 
+  let receiptDisplay = document.getElementById('paypal-receipt');
+  if (!receiptDisplay) {
+    receiptDisplay = document.createElement('p');
+    receiptDisplay.id = 'paypal-receipt';
+    receiptDisplay.style.marginTop = '10px';
+    receiptDisplay.style.fontWeight = 'bold';
+    paypalContainer.insertAdjacentElement('afterend', receiptDisplay);
+  }
+
   const amounts = {
     '0.25': 3,
     '1': 12,
@@ -21,16 +30,15 @@ window.paypalToggle = function() {
   paypal.Buttons({
     createOrder: (data, actions) => {
       return actions.order.create({
-        purchase_units: [{
-          amount: { value: amount.toFixed(2) }
-        }]
+        purchase_units: [{ amount: { value: amount.toFixed(2) } }]
       });
     },
     onApprove: async (data, actions) => {
       const order = await actions.order.capture();
-      alert(`Payment completed: $${amount.toFixed(2)} via PayPal.`);
 
-      // Optionally auto-store the order data
+      receiptDisplay.textContent = `✅ Payment completed: $${amount.toFixed(2)} via PayPal. Recording receipt...`;
+      receiptDisplay.style.color = '#1f7a1f';
+
       const formData = {
         businessName: document.getElementById("business-name").value,
         ein: document.getElementById("business-ein").value,
@@ -44,7 +52,6 @@ window.paypalToggle = function() {
         paymentMethod: "paypal"
       };
 
-      // Auto-submit to your worker for record keeping only
       try {
         const response = await fetch("https://api.braxendevelopment.work", {
           method: "POST",
@@ -55,4 +62,20 @@ window.paypalToggle = function() {
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || "Worker failed");
 
-        alert(`Receipt rec
+        // Use the *same* receipt ID returned by the Worker
+        receiptDisplay.innerHTML = `✅ Payment recorded successfully.<br>Receipt ID: <strong>${result.receiptID}</strong>`;
+        receiptDisplay.style.color = "green";
+
+      } catch (err) {
+        receiptDisplay.textContent = `⚠️ Payment succeeded but logging failed: ${err.message}`;
+        receiptDisplay.style.color = "darkred";
+      }
+    },
+    onError: (err) => {
+      console.error(err);
+      receiptDisplay.textContent = "❌ PayPal error occurred. Please try again.";
+      receiptDisplay.style.color = "darkred";
+    }
+  }).render('#paypal-button-container');
+};
+
