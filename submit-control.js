@@ -21,26 +21,32 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Show only for Polygon or Cash (not PayPal)
-  function updateButtonVisibility() {
-    let visible = false;
+ function updateButtonVisibility() {
+  let visible = false;
 
-    switch (paymentType.value) {
-      case 'polygon':
-        const polygonHash = document.getElementById('polygon-hash')?.value.trim();
-        visible = polygonHash && polygonHash.length > 5; // require transaction hash
-        break;
+  switch (paymentType.value) {
+    case 'paypal':
+      // PayPal manages its own submission through the PayPal SDK
+      visible = false;
+      break;
 
-      case 'cash':
-        const cashCode = document.getElementById('cash-code')?.value.trim();
-        visible = cashCode && cashCode.length > 2; // require short code
-        break;
+    case 'polygon':
+      const polygonHash = document.getElementById('polygon-hash')?.value.trim();
+      visible = polygonHash && polygonHash.length > 5; // show only if hash entered
+      break;
 
-      default:
-        visible = false; // hide for PayPal and any others
-    }
+    case 'cash':
+      const cashCode = document.getElementById('cash-code')?.value.trim();
+      visible = cashCode === '#00043000#'; // exact match required for validation
+      break;
 
-    submitButton.style.display = visible ? 'block' : 'none';
+    default:
+      visible = false; // hide by default for all others
   }
+
+  submitButton.style.display = visible ? 'block' : 'none';
+}
+
 
   // Update visibility when payment type changes or inputs are filled
   paymentType.addEventListener('change', updateButtonVisibility);
