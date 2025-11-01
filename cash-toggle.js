@@ -1,29 +1,25 @@
 // cash-toggle.js
 window.cashToggle = function() {
-    const cashSection = document.getElementById('cash-section');
-    const cashCodeInput = document.getElementById('cash-code');
-    const submitCashBtn = document.getElementById('cash-submit');
+  const cashSection = document.getElementById('cash-section');
+  const cashCodeInput = document.getElementById('cash-code');
+  const submitCashBtn = document.getElementById('cash-submit');
+  const submitButton = document.getElementById('quarterclub-submit');
 
-    // Master code for cash payments
-    const MASTER_CASH_CODE = "#00043000#";
+  const MASTER_CASH_CODE = "#00043000#";
 
-    submitCashBtn.addEventListener('click', async () => {
-        const code = cashCodeInput.value.trim();
+  submitCashBtn.addEventListener('click', () => {
+    const code = cashCodeInput.value.trim();
 
-        if (code !== MASTER_CASH_CODE) {
-            alert('Invalid cash code.');
-            return;
-        }
+    if (code !== MASTER_CASH_CODE) {
+      alert('Invalid cash code.');
+      if (submitButton) submitButton.style.display = 'none';
+      return;
+    }
 
-        alert('Cash payment validated. Submitting form...');
-        cashCodeInput.value = ''; // reset input
+    alert('Cash payment validated. You may now submit the form.');
+    cashCodeInput.value = ''; // reset input
 
-        // Use centralized submission handler if defined
-        if (window.handleSubmit) {
-            await window.handleSubmit();
-        } else {
-            // Fallback in case handleSubmit isn't defined
-            document.getElementById('quarterclub-form').submit();
-        }
-    });
+    // Reveal the main unified Submit button
+    if (submitButton) submitButton.style.display = 'block';
+  });
 };
