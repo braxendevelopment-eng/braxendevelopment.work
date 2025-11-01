@@ -164,7 +164,65 @@ footer {
 
 /* ----------------- Animations ----------------- */
 @keyframes pulse-glow {
-  0% { box-shadow: 0 0 10px var(--glow-color); }
-  50% { box-shadow: 0 0 20px var(--glow-color); }
-  100% { box-shadow: 0 0 10px var(--glow-color); }
+  0% {
+    box-shadow: 0 0 8px var(--glow-color), 0 0 16px var(--glow-color);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color);
+    filter: brightness(1.25);
+  }
+  100% {
+    box-shadow: 0 0 8px var(--glow-color), 0 0 16px var(--glow-color);
+    filter: brightness(1);
+  }
 }
+
+/* Apply slower, smoother shimmer */
+button:hover,
+#polygon-submit:hover,
+#copy-polygon:hover,
+#cash-submit:hover,
+#paypal-button-container iframe:hover {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+/* ----------------- Luxury Shimmer for Links & Text ----------------- */
+a:hover,
+.cta:hover,
+h1:hover,
+h2:hover,
+h3:hover,
+label:hover {
+  color: var(--glow-color);
+  text-shadow:
+    0 0 5px var(--glow-color),
+    0 0 10px var(--glow-color),
+    0 0 20px var(--glow-color);
+  animation: pulse-glow 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+/* CTA Buttons (like “Join the Quarter Club”) */
+.cta {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #111;
+  border: 1px solid var(--glow-color);
+  color: var(--glow-color);
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px transparent;
+}
+
+.cta:hover {
+  background-color: var(--glow-color);
+  color: #000;
+  box-shadow:
+    0 0 10px var(--glow-color),
+    0 0 20px var(--glow-color),
+    0 0 40px var(--glow-color);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
