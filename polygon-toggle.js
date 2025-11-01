@@ -1,37 +1,41 @@
 // polygon-toggle.js
 window.polygonToggle = function() {
-  const polygonSubmit = document.getElementById('polygon-submit');
   const polygonHashInput = document.getElementById('polygon-hash');
   const polygonStatus = document.getElementById('polygon-status');
-  const submitButton = document.getElementById('quarterclub-submit');
+  const submitButton = document.getElementById('quarterclub-submit'); // global submit
 
-  polygonSubmit.addEventListener('click', async () => {
+  const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com");
+  const recipient = document.getElementById('polygon-wallet').value;
+
+  polygonHashInput.addEventListener('input', async () => {
     const hash = polygonHashInput.value.trim();
     if (!hash) {
-      polygonStatus.textContent = "Please enter a transaction hash.";
+      polygonStatus.textContent = "❌ Enter your Polygon transaction hash.";
+      polygonStatus.style.color = "red";
+      submitButton.style.display = "none";
       return;
     }
 
     polygonStatus.textContent = "Verifying transaction...";
+    polygonStatus.style.color = "orange";
+    submitButton.style.display = "none";
 
     try {
-      const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com");
       const tx = await provider.getTransaction(hash);
       if (!tx) throw new Error("Transaction not found.");
 
-      const recipient = document.getElementById('polygon-wallet').value;
       if (tx.to.toLowerCase() !== recipient.toLowerCase()) {
-        throw new Error("Transaction sent to wrong address.");
+        throw new Error("Transaction sent to the wrong address.");
       }
 
-      polygonStatus.textContent = `Transaction confirmed: ${ethers.formatEther(tx.value)} MATIC sent.`;
-
-      // Once verified, reveal the real Submit button
-      if (submitButton) submitButton.style.display = 'block';
+      polygonStatus.textContent = "✅ Transaction verified. You may now submit.";
+      polygonStatus.style.color = "green";
+      submitButton.style.display = "block";
 
     } catch (err) {
-      polygonStatus.textContent = "Error verifying transaction: " + err.message;
-      if (submitButton) submitButton.style.display = 'none';
+      polygonStatus.textContent = "❌ " + err.message;
+      polygonStatus.style.color = "red";
+      submitButton.style.display = "none";
     }
   });
 };
