@@ -52,7 +52,6 @@ nav a {
 
 nav a:hover {
   color: var(--glow-color);
-  text-shadow: 0 0 8px var(--glow-color);
 }
 
 /* ----------------- Sections ----------------- */
@@ -74,9 +73,6 @@ h1, h2, h3 {
 a {
   color: var(--glow-color);
   text-decoration: underline;
-}
-a:hover {
-  text-shadow: 0 0 8px var(--glow-color);
 }
 
 /* ----------------- Form Styles ----------------- */
@@ -100,7 +96,6 @@ form button {
   background-color: #000;
   color: var(--text-light);
   box-sizing: border-box;
-  transition: 0.3s ease;
 }
 
 form input:focus,
@@ -115,19 +110,21 @@ form button {
   color: var(--glow-color);
   border: 1px solid var(--glow-color);
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 form button:hover {
   background-color: var(--glow-color);
   color: #000;
-  box-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
-  animation: pulse-glow 1.5s infinite;
 }
 
 /* ----------------- Payment Sections ----------------- */
 #paypal-button-container {
   margin-top: 20px;
+  border: 1px solid var(--glow-color);
+  border-radius: 8px;
+  padding: 15px;
+  background: rgba(17, 0, 25, 0.5);
+  box-shadow: 0 0 15px rgba(185, 75, 255, 0.4);
 }
 
 #polygon-section, #cash-section {
@@ -161,68 +158,3 @@ footer {
   line-height: 1.6;
   margin-bottom: 15px;
 }
-
-/* ----------------- Animations ----------------- */
-@keyframes pulse-glow {
-  0% {
-    box-shadow: 0 0 8px var(--glow-color), 0 0 16px var(--glow-color);
-    filter: brightness(1);
-  }
-  50% {
-    box-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color);
-    filter: brightness(1.25);
-  }
-  100% {
-    box-shadow: 0 0 8px var(--glow-color), 0 0 16px var(--glow-color);
-    filter: brightness(1);
-  }
-}
-
-/* Apply slower, smoother shimmer */
-button:hover,
-#polygon-submit:hover,
-#copy-polygon:hover,
-#cash-submit:hover,
-#paypal-button-container iframe:hover {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-/* ----------------- Luxury Shimmer for Links & Text ----------------- */
-a:hover,
-.cta:hover,
-h1:hover,
-h2:hover,
-h3:hover,
-label:hover {
-  color: var(--glow-color);
-  text-shadow:
-    0 0 5px var(--glow-color),
-    0 0 10px var(--glow-color),
-    0 0 20px var(--glow-color);
-  animation: pulse-glow 3s ease-in-out infinite;
-  transition: all 0.3s ease;
-}
-
-/* CTA Buttons (like “Join the Quarter Club”) */
-.cta {
-  display: inline-block;
-  padding: 12px 30px;
-  background-color: #111;
-  border: 1px solid var(--glow-color);
-  color: var(--glow-color);
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 10px transparent;
-}
-
-.cta:hover {
-  background-color: var(--glow-color);
-  color: #000;
-  box-shadow:
-    0 0 10px var(--glow-color),
-    0 0 20px var(--glow-color),
-    0 0 40px var(--glow-color);
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
